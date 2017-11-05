@@ -55,3 +55,5 @@ sudo make install
 sed -i '1iexport PATH='"$programsPath"'/build/bin:$PATH' ~/.bashrc
 
 sed -i '1iexport LD_LIBRARY_PATH='"$programsPath"'/build/lib:$LD_LIBRARY_PATH'  ~/.bashrc
+
+source ~/.bashrc
