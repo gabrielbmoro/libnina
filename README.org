@@ -1,5 +1,5 @@
 #+AUTHOR: Gabriel Bronzatti Moro
-#+TITLE: LabBook
+#+TITLE: README
 #+LATEX_HEADER: \usepackage[margin=2cm,a4paper]{geometry}
 #+STARTUP: overview indent
 #+TAGS: Gabriel(G) Lucas(L) noexport(n) deprecated(d)
@@ -8,3 +8,147 @@
 #+SEQ_TODO: TODO(t!) STARTED(s!) WAITING(w!) | DONE(d!) CANCELLED(c!) DEFERRED(f!)
 #+mode: org
 #+coding: utf-8
+
+* What is libnina?
+
+- Libnina is a library used to reduce the energy consumption of OpenMP
+  parallel applications. The libnina uses two steps, the first step is
+  necessary to generate a configuration file that will describe the
+  target application's behavior. In the second step, the target
+  application will be executed using pomp2 library with libnina,
+  libnina will use the configuration file to reduce the energy
+  consumption using cpufreq calls to change the CPU frequency
+  according to a configuration file.
+
+** Example of use
+
+*** Experimento =teste_1=
+
+- The strassen algorithm will be used as an example.
+
+#+begin_src sh :results output :exports both
+cd teste_1/src/
+ls 
+#+end_src
+
+#+RESULTS:
+: Makefile.gcc
+: Makefile.scorep
+: strassen.c
+
+
+Using makefile was generated two execs, the first without libnina
+instrumentation, and other with libnina instrumentation. 
+
+**** Step 1
+
+- We need know about application's behavior, before of use it with
+  libnina. We use Scorep, this tool may be installed using our script
+  in:
+
+#+begin_src sh :results output :exports both
+cd scripts/
+ls
+#+end_src
+
+#+RESULTS:
+: scorep_installation.sh
+
+- Compilation of the target application using Scorep:
+
+#+begin_src sh :results output :exports both
+cd teste_1/src/
+scorep-gcc strassen.c -o strassen_with_scorep
+#+end_src
+
+#+RESULTS:
+: a.out
+: Makefile.gcc
+: strassen.c
+: strassen_with_scorep
+
+- Execution using Score-p
+
+#+begin_src sh :results output :exports both
+export OMP_NUM_THREADS=4
+export SCOREP_ENABLE_TRACING=true
+export SCOREP_TOTAL_MEMORY=3G
+export SCOREP_METRIC_PAPI=PAPI_TOT_INS,PAPI_TOT_CYC
+
+sudo -E ./strassen_with_scorep 400
+#+end_src
+
+- Now, it's necessary for you install more two dependencies:
+
+***** Otf22csv provided by Akypuera
+
+- This tool used must be installed using the follow script:
+
+#+begin_src sh :results output :exports both
+ls scripts/ | grep -i aky
+#+end_src
+
+#+RESULTS:
+: akypuera_installation.sh
+
+***** R libraries
+
+- The R libraries must be installed using the follow script:
+
+#+begin_src sh :results output :exports both
+ls scripts/ grep -i r
+#+end_src
+
+#+RESULTS:
+
+***** Experiment
+
+- The configuration file used by libnina will be generated now, using
+  the follow script:
+
+#+begin_src sh :results output :exports both
+cd teste_1/scripts/
+ls
+#+end_src
+
+#+RESULTS:
+: step1.sh
+
+- Using this script, it'll be generated two folters in expData:
+
+#+begin_src sh :results output :exports both
+ls teste_1/expData/
+#+end_src
+
+#+RESULTS:
+: cpu
+: mem
+
+- The folder called =cpu= has the csv file with cpu's metrics for each
+  application's region. In =mem= folder has csv file with memory's
+  metrics for each application's region. This two results will be
+  joined using a R script:
+
+#+begin_src sh :results output :exports both
+cd teste_1/scripts/
+Rscript step1_configurationFileExport.r
+#+end_src
+
+#+RESULTS:
+
+#+begin_src sh :results output :exports both
+ls teste_1/expData
+#+end_src
+
+#+RESULTS:
+: cpu
+: mem
+
+#+begin_src sh :results output :exports both
+cat teste_1/expData/cpu/traces.csv | grep -i omp
+
+#+end_src
+
+#+RESULTS:
+
+* Installation
