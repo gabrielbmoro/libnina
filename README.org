@@ -1,4 +1,4 @@
-#+AUTHOR: Gabriel Bronzatti Moro
+#+AUTHOR: Gabriel Bronzatti Moro e Lucas M. Schnorr
 #+TITLE: README
 #+LATEX_HEADER: \usepackage[margin=2cm,a4paper]{geometry}
 #+STARTUP: overview indent
