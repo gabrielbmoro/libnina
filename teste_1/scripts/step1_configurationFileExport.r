@@ -48,4 +48,4 @@ dfT$region <- dftmp2$V1
 #sorting according libnina's configuration
 dfT <- dfT %>% select(lines,maxFreq,region,file) %>% as.data.frame();
 
-write.csv(dfT, file = "	../expData/configurationFile.csv")
+write.csv(dfT, file = "../expData/configurationFile.csv")
