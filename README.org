@@ -9,7 +9,7 @@
 #+mode: org
 #+coding: utf-8
 
-* What is libnina?
+* What is the libnina?
 
 - Libnina is a library used to reduce the energy consumption of OpenMP
   parallel applications. The libnina uses two steps, the first step is
@@ -21,7 +21,6 @@
   according to a configuration file.
   
 ** Example of use
-
 *** Experimento =teste_1=
 
 - The strassen algorithm will be used as an example.
@@ -33,10 +32,6 @@ ls
 
 #+RESULTS:
 : strassen.c
-
-
-Using makefile was generated two execs, the first without libnina
-instrumentation, and other with libnina instrumentation. 
 
 **** Step 1
 
@@ -176,7 +171,7 @@ ls teste_1/expData/
 
 - The folder called =cpu= has the csv file with cpu's metrics for each
   application's region. In =mem= folder has csv file with memory's
-  metrics for each application's region. This two results will be
+  metrics for each application's region too. These two results will be
   joined using a R script:
 
 #+begin_src sh :results output :exports both
