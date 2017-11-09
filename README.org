@@ -23,6 +23,23 @@
 ** Example of use
 *** Experimento =teste_1=
 
+- Plataform used:
+
+#+begin_src sh :results output :exports both
+lscpu | grep -i CPU
+#+end_src
+
+#+RESULTS:
+: CPU op-mode(s):        32-bit, 64-bit
+: CPU(s):                4
+: On-line CPU(s) list:   0-3
+: CPU family:            6
+: Model name:            Intel(R) Core(TM) i5-4210U CPU @ 1.70GHz
+: CPU MHz:               1879.400
+: CPU max MHz:           2700,0000
+: CPU min MHz:           800,0000
+: NUMA node0 CPU(s):     0-3
+
 - The strassen algorithm will be used as an example.
 
 #+begin_src sh :results output :exports both
@@ -202,9 +219,8 @@ cat $HOME/svn/libnina/teste_1/expData/ninaFileInput.csv
 - This is a final format to libnina executed strassen program changing
   the frequency according to its regions.
 
-**** STARTED Step 2
+**** Step 2
 
-- State "STARTED"    from              [2017-11-08 Qua 23:48]
 - Now, we go to compile the libnina:
 
 #+begin_src sh :results output :exports both
