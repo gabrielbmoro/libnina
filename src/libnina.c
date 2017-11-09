@@ -96,17 +96,26 @@ void NINA_CHANGEFREQ(long int freq) {
 	cpufreqReturnedFirst = cpufreq_set_frequency(0, freq);
 	cpufreqReturnedLast = cpufreq_set_frequency(AMOUNT_OF_CPUS-1, freq);
 
-	if(isLogServiceEnabled){		
-		NINA_GET_TIME(time);
-		///////////////////////////////////////////////////////////////////////////
-		// Alterando a frequência da primeira cpu e da última, dessa forma todas 
-		// replicarão o efeito.
-		printf("%s: ->NINA_CHANGEFREQ: %d freq changed is %d \n",time,0,cpufreqReturnedFirst);
-		printf("%s: ->NINA_CHANGEFREQ: %d freq changed is %d \n",time,AMOUNT_OF_CPUS-1,cpufreqReturnedLast);
-	}
-
-	free(time);
-
+	if(cpufreqReturnedFirst < 0){
+			if(freq==MAX_FREQUENCY){
+				system("sudo cpufreq-set -g performance");
+			} else {
+				system("sudo cpufreq-set -g powersave");
+			}
+		if(isLogServiceEnabled){
+			NINA_GET_TIME(time);
+			printf("%s -> NINA_CHANGEFREQ is not possible to change freq using userspace governor...\n");
+			printf("%s -> NINA_CHANGEFREQ using system call...\n");
+			free(time);
+		}
+	} else {
+		if(isLogServiceEnabled){		
+			NINA_GET_TIME(time);
+			printf("%s: ->NINA_CHANGEFREQ: %d freq changed is %d \n",time,0,cpufreqReturnedFirst);
+			printf("%s: ->NINA_CHANGEFREQ: %d freq changed is %d \n",time,AMOUNT_OF_CPUS-1,cpufreqReturnedLast);
+			free(time);
+		}
+	}	
 }
 
 void * NINA_GET_TIME(char * strReturned) {

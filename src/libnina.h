@@ -23,7 +23,6 @@
     #define BUFFER_LINE 200
     #define AMOUNT_OF_CPUS 4
 
-
     /*
      * Nome: NINA_CsvLine
      *
