@@ -202,4 +202,119 @@ cat $HOME/svn/libnina/teste_1/expData/ninaFileInput.csv
 - This is a final format to libnina executed strassen program changing
   the frequency according to its regions.
 
+**** STARTED Step 2
+
+- State "STARTED"    from              [2017-11-08 Qua 23:48]
+- Now, we go to compile the libnina:
+
+#+begin_src sh :results output :exports both
+cd src/
+make
+LD_LIBRARY_PATH=/home/gbmoro/svn/libnina/src:$LD_LIBRARY_PATH
+#+end_src
+
+#+RESULTS:
+
+- Using libnina in strassen compilation:
+
+#+begin_src sh :session f :results output :exports both 
+cd teste_1/src/
+/opt/opari2/bin/opari2 strassen.c
+gcc -fopenmp -g -O2 -I/opt/opari2/include -c strassen.mod.c -o strassen_c.mod.o
+`/opt/opari2/bin/opari2-config --nm` strassen_c.mod.o | `/opt/opari2/bin/opari2-config --region-initialization` > pompregions_c.c
+gcc  -I/opt/opari2/include -c pompregions_c.c -o pompregions_c.o
+gcc -fopenmp -g -O2 strassen_c.mod.o pompregions_c.o -L/home/gbmoro/svn/libnina/src -lnina -lcpufreq -o strassen_c_inst
+ls
+#+end_src
+
+#+RESULTS:
+: 
+: $ $ $ $ $ $ pompregions_c.c  strassen.c	  strassen_c.mod.o	strassen.mod.c
+: pompregions_c.o  strassen_c_inst  strassen.c.opari.inc
+
+- Running
+
+#+begin_src sh :results output :exports both
+cd teste_1/src/
+
+export NINA_CONFIG=/home/gbmoro/svn/libnina/teste_1/expData/ninaFileInput.csv
+
+sudo -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gbmoro/svn/libnina/src/ ./strassen_c_inst
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+0: init
+08.11.2017.23h45m20s: ->NINA_maxFrequencyOfProcessor: The frequency will be set to max
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 0 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 3 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_CsvFileReader: csvFileReader -> begin ...
+08.11.2017.23h45m20s: ->NINA_CsvFileReader: The environment variable called NINA_CONFIG is defined...
+08.11.2017.23h45m20s: ->NINA_CsvFileReader: The environment variable called NINA_CONFIG is /home/gbmoro/svn/libnina/teste_1/expData/ninaFileInput.csv...
+08.11.2017.23h45m20s: ->NINA_CsvFileReader: csvFileReader -> The file was readed 0...
+08.11.2017.23h45m20s: ->NINA_GetSizeOfFile: NINA_Amount of lines in file: 5
+08.11.2017.23h45m20s: ->NINA_CsvFileReader: l0 regionName par, fileName ���, start_line 117, freq_tmp 1200...
+08.11.2017.23h45m20s: ->NINA_CsvFileReader: l1 regionName par, fileName ���, start_line 117, freq_tmp 1200...
+08.11.2017.23h45m20s: ->NINA_CsvFileReader: l2 regionName par, fileName ���, start_line 117, freq_tmp 1200...
+08.11.2017.23h45m20s: ->NINA_CsvFileReader: l3 regionName par, fileName ���, start_line 117, freq_tmp 1200...
+08.11.2017.23h45m20s: ->NINA_CsvFileReader: l4 regionName par, fileName ���, start_line 117, freq_tmp 1200...
+08.11.2017.23h45m20s: ->NINA_CsvFileReader: csvFileReader -> end...
+  0: fork  parallel
+  0: begin parallel /home/gbmoro/svn/libnina/teste_1/src/strassen.c:117-135
+08.11.2017.23h45m20s: ->NINA_CALL: I was called... at par -> ���:117
+  2: begin parallel /home/gbmoro/svn/libnina/teste_1/src/strassen.c:117-135
+  1: begin parallel /home/gbmoro/svn/libnina/teste_1/src/strassen.c:117-135
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 0 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 3 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_CALL: I was called... at par -> ���:117
+  3: begin parallel /home/gbmoro/svn/libnina/teste_1/src/strassen.c:117-135
+08.11.2017.23h45m20s: ->NINA_CALL: I was called... at par -> ���:117
+08.11.2017.23h45m20s: ->NINA_CALL: I was called... at par -> ���:117
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 0 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 3 freq changed is -19 
+  2: enter for
+  2: enter implicit barrier of parallelfor
+  0: enter for
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 0 freq changed is -19 
+  0: enter implicit barrier of parallelfor
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 3 freq changed is -19 
+  1: enter for
+  1: enter implicit barrier of parallelfor
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 0 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 3 freq changed is -19 
+  3: enter for
+  3: enter implicit barrier of parallelfor
+  3: exit  implicit barrier of parallelfor
+  3: exit  for
+  3: end parallel /home/gbmoro/svn/libnina/teste_1/src/strassen.c:117-135
+  1: exit  implicit barrier of parallelfor
+08.11.2017.23h45m20s: ->NINA_maxFrequencyOfProcessor: The frequency will be set to max
+  1: exit  for
+  1: end parallel /home/gbmoro/svn/libnina/teste_1/src/strassen.c:117-135
+08.11.2017.23h45m20s: ->NINA_maxFrequencyOfProcessor: The frequency will be set to max
+  2: exit  implicit barrier of parallelfor
+  2: exit  for
+  2: end parallel /home/gbmoro/svn/libnina/teste_1/src/strassen.c:117-135
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 0 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 3 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_maxFrequencyOfProcessor: The frequency will be set to max
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 0 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 3 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 0 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 3 freq changed is -19 
+  0: exit  implicit barrier of parallelfor
+  0: exit  for
+  0: end parallel /home/gbmoro/svn/libnina/teste_1/src/strassen.c:117-135
+08.11.2017.23h45m20s: ->NINA_maxFrequencyOfProcessor: The frequency will be set to max
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 0 freq changed is -19 
+08.11.2017.23h45m20s: ->NINA_CHANGEFREQ: 3 freq changed is -19 
+  0: join  parallel
+HPCELO:0.006109
+  0: finalize
+#+end_example
+
+- Okay, it is okay. Now we're gonna the teste using the correct input,
+  and to evaluate the energy gain.
+
 * Installation
