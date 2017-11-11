@@ -97,17 +97,10 @@ void NINA_CHANGEFREQ(long int freq) {
 	cpufreqReturnedLast = cpufreq_set_frequency(AMOUNT_OF_CPUS-1, freq);
 
 	if(cpufreqReturnedFirst < 0){
-			if(freq==MAX_FREQUENCY){
-				system("sudo cpufreq-set -g performance");
-			} else {
-				system("sudo cpufreq-set -g powersave");
-			}
-		if(isLogServiceEnabled){
 			NINA_GET_TIME(time);
-			printf("%s -> NINA_CHANGEFREQ is not possible to change freq using userspace governor...\n");
-			printf("%s -> NINA_CHANGEFREQ using system call...\n");
+			printf("%s -> NINA_CHANGEFREQ: it is impossible to change the CPU frequency. It's necessary the userspace governor...\n", time);
 			free(time);
-		}
+			exit(0);
 	} else {
 		if(isLogServiceEnabled){		
 			NINA_GET_TIME(time);
