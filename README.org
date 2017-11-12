@@ -21,7 +21,7 @@
   according to a configuration file.
   
 ** Example of use
-*** Experimento =teste_1=
+*** Experiment: =teste_1=
 
 - Plataform used:
 
@@ -277,3 +277,111 @@ cpufreq-info -g
 
 #+RESULTS:
 : performance powersave
+
+*** Experiment: =teste_2=
+
+- Plataform used =hype2=:
+
+#+begin_src sh :results output :exports both
+lscpu | grep -i CPU
+#+end_src
+
+#+RESULTS:
+: CPU op-mode(s):        32-bit, 64-bit
+: CPU(s):                40
+: On-line CPU(s) list:   0-39
+: CPU family:            6
+: Model name:            Intel(R) Xeon(R) CPU E5-2650 v3 @ 2.30GHz
+: CPU MHz:               1200.000
+: CPU max MHz:           2300,0000
+: CPU min MHz:           1200,0000
+: NUMA node0 CPU(s):     0-9,20-29
+: NUMA node1 CPU(s):     10-19,30-39
+
+- According to =teste_1=, the libnina uses the cpufreq library, in this
+  context it's necessary the =userspace= governor. We're gonna verify
+  if this governor exits on =hype2= platform.
+
+#+begin_src sh :results output :exports both
+cpufreq-info -g
+#+end_src
+
+#+RESULTS:
+: conservative ondemand userspace powersave performance
+
+- Okay, it's possible to run some program using libnina. In previous
+  test we had executed the strassen application using the
+  libnina. Now, we're gonna replicate the same experiment, but we
+  using the libnina with userspace governor on =hype2= platform.
+  
+**** Step1
+
+- Is the same methodology used in =teste_1=.
+
+- The configuration file will be copied.
+
+#+begin_src sh :results output :exports both
+mkdir teste_2/
+cd teste_2/
+mkdir expData/
+cd ..
+cp teste_1/expData/ninaFileInput.csv teste_2/expData
+ls teste_2/expData
+#+end_src
+
+- The strassen's code will be copied too.
+
+#+begin_src sh :session foo :results output :exports both 
+mkdir teste_2/src/
+cp teste_1/src/* teste_2/src
+ls teste_2/src
+#+end_src
+
+#+RESULTS:
+:  strassen.c
+
+- I used a MakeFile to compile strassen application with libnina:
+
+#+begin_src sh :results output :exports both
+#first step, the libnina will be compiled!!
+cd src/
+make
+cd ..
+cd teste_2/src/
+make
+ls
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+gcc  -I/COREP_PATH/include/ -I. -fPIC -Wall -Wextra -O2 -g -fopenmp  -lcpufreq  -MM opari2_ctc_parser.c >opari2_ctc_parser.d
+gcc  -I/COREP_PATH/include/ -I. -fPIC -Wall -Wextra -O2 -g -fopenmp  -lcpufreq  -MM pomp2_region_info.c >pomp2_region_info.d
+gcc  -I/COREP_PATH/include/ -I. -fPIC -Wall -Wextra -O2 -g -fopenmp  -lcpufreq  -MM pomp2_user_region_info.c >pomp2_user_region_info.d
+gcc  -I/COREP_PATH/include/ -I. -fPIC -Wall -Wextra -O2 -g -fopenmp  -lcpufreq  -MM pomp2_lib.c >pomp2_lib.d
+gcc  -I/COREP_PATH/include/ -I. -fPIC -Wall -Wextra -O2 -g -fopenmp  -lcpufreq  -MM libnina.c >libnina.d
+gcc  -I/COREP_PATH/include/ -I. -fPIC -Wall -Wextra -O2 -g -fopenmp  -lcpufreq    -c -o libnina.o libnina.c
+gcc  -I/COREP_PATH/include/ -I. -fPIC -Wall -Wextra -O2 -g -fopenmp  -lcpufreq    -c -o pomp2_lib.o pomp2_lib.c
+gcc  -I/COREP_PATH/include/ -I. -fPIC -Wall -Wextra -O2 -g -fopenmp  -lcpufreq    -c -o pomp2_user_region_info.o pomp2_user_region_info.c
+gcc  -I/COREP_PATH/include/ -I. -fPIC -Wall -Wextra -O2 -g -fopenmp  -lcpufreq    -c -o pomp2_region_info.o pomp2_region_info.c
+gcc  -I/COREP_PATH/include/ -I. -fPIC -Wall -Wextra -O2 -g -fopenmp  -lcpufreq    -c -o opari2_ctc_parser.o opari2_ctc_parser.c
+gcc  -LCOREP_PATH/lib/ -shared   -o libnina.so libnina.o pomp2_lib.o pomp2_user_region_info.o pomp2_region_info.o opari2_ctc_parser.o
+gcc -fopenmp -g -O2 strassen.c -o strassen_c
+/opt/opari2/bin/opari2 strassen.c
+gcc -fopenmp -g -O2 -I/opt/opari2/include -c strassen.mod.c -o strassen_c.mod.o
+`/opt/opari2/bin/opari2-config --nm` strassen_c.mod.o | `/opt/opari2/bin/opari2-config --region-initialization` > pompregions_c.c
+gcc  -I/opt/opari2/include -c pompregions_c.c -o pompregions_c.o
+gcc -fopenmp -g -O2 strassen_c.mod.o pompregions_c.o -L/home/gbmoro/svn/libnina/src -lnina -lcpufreq -o strassen_c_inst
+Makefile
+pompregions_c.c
+pompregions_c.o
+strassen_c
+strassen.c
+strassen_c_inst
+strassen_c.mod.o
+strassen.c.opari.inc
+strassen.mod.c
+#+end_example
+
+- If you want to run strassen without libnina, you use =strassen_c=. If
+  you want to run strassen with libnina, you use =strassen_c_inst=. 
