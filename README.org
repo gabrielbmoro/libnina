@@ -310,13 +310,13 @@ cpufreq-info -g
 : conservative ondemand userspace powersave performance
 
 - Okay, it's possible to run some program using libnina. In previous
-  test we had executed the strassen application using the
-  libnina. Now, we're gonna replicate the same experiment, but we
-  using the libnina with userspace governor on =hype2= platform.
+  test, we had executed the strassen application using the
+  libnina. Now, we're gonna replicate the same experiment, but we're
+  using the libnina with userspace governor on =hype2= platform. 
   
 **** Step1
 
-- Is the same methodology used in =teste_1=.
+- This step1 will use the same methodology of the =teste_1=.
 
 - The configuration file will be copied.
 
@@ -340,7 +340,7 @@ ls teste_2/src
 #+RESULTS:
 :  strassen.c
 
-- I used a MakeFile to compile strassen application with libnina:
+- We're using a MakeFile to compile strassen application with libnina:
 
 #+begin_src sh :results output :exports both
 #first step, the libnina will be compiled!!
@@ -383,5 +383,86 @@ strassen.c.opari.inc
 strassen.mod.c
 #+end_example
 
-- If you want to run strassen without libnina, you use =strassen_c=. If
-  you want to run strassen with libnina, you use =strassen_c_inst=. 
+- If you want to run the strassen application without libnina, you
+  need to use the file called =strassen_c=. Already, if you want to run
+  the strassen application with libnina, you need to use the
+  executable called =strassen_c_inst=.
+
+**** Step2
+
+- This step will be executed the strassen application, we evaluate the
+  use of the libnina. The input size used will be 8148, because that
+  is a big input, we'll hope to obtain some gain.
+
+- The governor will be changed to =userspace= mode:
+
+#+begin_src sh :results output :exports both
+cd scripts/
+sudo ./setgov.sh
+#+end_src
+
+#+RESULTS:
+
+- The application will be executed using the follow command lines:
+
+#+begin_src sh :results output :exports both
+cd teste_2/src/
+
+echo "MEMORY EVALUATION----------------------------->" 
+echo ""
+echo "Execution with libnina, energy-mem"
+export NINA_CONFIG=/home/gabrielbmoro/svn/libnina/teste_2/expData/ninaFileInput.csv
+sudo -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gabrielbmoro/svn/libnina/src/ perf stat -a -e \"power/energy-ram/\" ./strassen_c_inst 8148 2> output.txt
+echo "$(cat output.txt | grep -i Joules | awk ' { print $1 } ')'
+echo ""
+echo "Execution without libnina, energy-mem"
+sudo -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gabrielbmoro/svn/libnina/src/ perf stat -a -e \"power/energy-ram/\" ./strassen_c 8148 2> output.txt
+echo "$(cat output.txt | grep -i Joules | awk ' { print $1 } ')'
+echo "<--------------------------------------------"
+echo ""
+echo ""
+echo "CPU EVALUATION----------------------------->" 
+echo ""
+echo "Execution with libnina, energy-pkg"
+export NINA_CONFIG=/home/gabrielbmoro/svn/libnina/teste_2/expData/ninaFileInput.csv
+sudo -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gabrielbmoro/svn/libnina/src/ perf stat -a -e \"power/energy-pkg/\" ./strassen_c_inst 8148 2> output.txt
+echo "$(cat output.txt | grep -i Joules | awk ' { print $1 } ')"
+echo ""
+echo "Execution without libnina, energy-pkg"
+sudo -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gabrielbmoro/svn/libnina/src/ perf stat -a -e \"power/energy-pkg/\" ./strassen_c 8148 2> output.txt
+echo "$(cat output.txt | grep -i Joules | awk ' { print $1 } ')'
+echo "<--------------------------------------------"
+#+end_src
+
+#+RESULTS:
+: MEMORY EVALUATION----------------------------->
+: 
+: Execution with libnina, energy-mem
+: HPCELO:113.970957
+: 1961.75'
+: 
+: Execution without libnina, energy-mem
+: HPCELO:113.709731
+: 1947.94'
+: <--------------------------------------------
+: 
+: 
+: CPU EVALUATION----------------------------->
+: 
+: Execution with libnina, energy-pkg
+: HPCELO:111.101870
+: 13718.05
+: 
+: Execution without libnina, energy-pkg
+: HPCELO:111.799422
+: 13973.14'
+: <--------------
+
+- In these results isn't possible to evaluate the libnina, because
+  the algorithm has only one parallel region, and the application's
+  behavior is not fully memory-bound. But, in this experiment was
+  possible to understand how to execute some application using the
+  libnina as library. Only a gain was obtained in cpu energy, but in
+  this experiment was used only one execution, in this context the
+  results can change by example in experiment using more than 30 random
+  executions.
