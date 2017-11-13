@@ -12,7 +12,7 @@
 /*
  * Variáveis globais
  */
-int 	isLogServiceEnabled 	= 	1; //1 com log, 0 sem log
+int 	isLogServiceEnabled 	= 	0; //1 com log, 0 sem log
 
 
 NINA_CsvFile * hashMapCreate(int size) {
@@ -89,26 +89,31 @@ NINA_CsvLine * createNewPair(long int freq, int line_start, char * regionName, c
 
 void NINA_CHANGEFREQ(long int freq) {
 
-	int cpufreqReturnedFirst = -1, cpufreqReturnedLast = -1;
+	int cpufreqReturned = -1;
 
 	char *time = (char *) malloc(BUFFER_SIZE * sizeof(char));
-	
-	cpufreqReturnedFirst = cpufreq_set_frequency(0, freq);
-	cpufreqReturnedLast = cpufreq_set_frequency(AMOUNT_OF_CPUS-1, freq);
 
-	if(cpufreqReturnedFirst < 0){
+	int count = 0;
+
+	#pragma omp parallel for schedule(static) private(count)
+	for(count = 0; count < AMOUNT_OF_CPUS; count++){
+		cpufreqReturned = cpufreq_set_frequency(count, freq);
+
+		if(cpufreqReturned < 0){
 			NINA_GET_TIME(time);
 			printf("%s -> NINA_CHANGEFREQ: it is impossible to change the CPU frequency. It's necessary the userspace governor...\n", time);
 			free(time);
 			exit(0);
-	} else {
-		if(isLogServiceEnabled){		
-			NINA_GET_TIME(time);
-			printf("%s: ->NINA_CHANGEFREQ: %d freq changed is %d \n",time,0,cpufreqReturnedFirst);
-			printf("%s: ->NINA_CHANGEFREQ: %d freq changed is %d \n",time,AMOUNT_OF_CPUS-1,cpufreqReturnedLast);
-			free(time);
+		} else {
+			if(isLogServiceEnabled){		
+			      	NINA_GET_TIME(time);
+				printf("%s: ->NINA_CHANGEFREQ: %d freq changed is %d \n",time,count,cpufreqReturned);
+			}
 		}
-	}	
+	}
+	
+	free(time);
+	
 }
 
 void * NINA_GET_TIME(char * strReturned) {
@@ -140,12 +145,15 @@ void NINA_CALL(char *region, char *file, int start_line) {
 
 	if(tmp != NULL){
 
-		printf("%s: ->NINA_CALL: I was called... at %s -> %s:%d\n",
+
+	  if(isLogServiceEnabled){
+	    	printf("%s: ->NINA_CALL: I was called... at %s -> %s:%d\n",
 			time,
 			tmp->regionName,
 			tmp->fileName,
 			tmp->line_start);
 
+	  }
 
 		NINA_CHANGEFREQ(tmp->freq);	
 
@@ -303,3 +311,4 @@ void NINA_CsvFileReader() {
 	
 	free(time);
 }
+

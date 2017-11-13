@@ -2,7 +2,7 @@
 **  NINA                                                             **
 *****************************************************************************
 **  Copyright (c) 1998-2009                                                **
-**  Gabriel B Moro, Lucas M. Schnorr, Instituto de Informática da UFRGS    **
+**  Gabriel B Moro, Lucas M. Schnorr, Instituto de InformÃ¡tica da UFRGS    **
 **                                                                         **
 ****************************************************************************/
 
@@ -10,26 +10,22 @@
 #define NINA_H
 
     ///////////////////////////////////////////////////////////////////////////
-    // Importação de dependências
+    // ImportaÃ§Ã£o de dependÃªncias
     #include <stdlib.h>
     #include <stdio.h>
     #include <string.h>
-    #include <time.h>
-    #include <cpufreq.h>
+	#include <time.h>
+	#include <cpufreq.h>
 
-    #define MAX_FREQUENCY 2300000
-    #define BUFFER_SIZE 1024
-    #define BUFFER_REGION 3
-    #define BUFFER_LINE 200
-    #define AMOUNT_OF_CPUS 40
+    
 
     /*
      * Nome: NINA_CsvLine
      *
      * Author: Gabriel B Moro
      *
-     * Descrição: Estrutura de dados responsável por
-     * representar a linha do csv de configuração.
+     * DescriÃ§Ã£o: Estrutura de dados responsÃ¡vel por
+     * representar a linha do csv de configuraÃ§Ã£o.
      */
     typedef struct NINA_CsvLine {
         long int 			   	freq;
@@ -45,8 +41,8 @@
      *
      * Author: Gabriel B Moro
      *
-     * Descrição: Estrutura de dados responsável por
-     * representar o arquivo csv de configuração.
+     * DescriÃ§Ã£o: Estrutura de dados responsÃ¡vel por
+     * representar o arquivo csv de configuraÃ§Ã£o.
      */
     typedef struct NINA_CsvFile {
         int 					amountOfLines;
@@ -68,23 +64,23 @@
      *
      * Author: Gabriel B Moro
      *
-     * Descrição: Este método será chamado no pomp2_lib.c
-     * em todos os métodos, a fim de que, pela primeira
-     * execução seja possível instrumentar adequadamente
-     * o código alvo.
+     * DescriÃ§Ã£o: Este mÃ©todo serÃ¡ chamado no pomp2_lib.c
+     * em todos os mÃ©todos, a fim de que, pela primeira
+     * execuÃ§Ã£o seja possÃ­vel instrumentar adequadamente
+     * o cÃ³digo alvo.
      */
     void NINA_CHANGEFREQ(long int freq);
 
     void * NINA_GET_TIME(char * strReturned);
 
-    void NINA_CALL(char *region, char *file, int start_line);
+	void NINA_CALL(char *region, char *file, int start_line);
 
     /*
      * Nome: NINA_GetSizeOfFile
      *
      * Author: Gabriel B Moro
      *
-     * Descrição: Função responsável por calcular o
+     * DescriÃ§Ã£o: FunÃ§Ã£o responsÃ¡vel por calcular o
      * tamanho do arquivo em quantidade de linhas.
      */
     int NINA_GetSizeOfFile(char *filePath);
@@ -94,9 +90,9 @@
      *
      * Author: Gabriel B Moro
      *
-     * Descrição: Esta função deve ser chamada no
-     * POMP_INIT para levantar a frequência de
-     * processador no máximo.
+     * DescriÃ§Ã£o: Esta funÃ§Ã£o deve ser chamada no
+     * POMP_INIT para levantar a frequÃªncia de
+     * processador no mÃ¡ximo.
      */
     void NINA_maxFrequencyOfProcessor();
 
@@ -107,7 +103,7 @@
      *
      * Author: Gabriel B Moro
      *
-     * Descrição: Esta função lê o csv e alimenta a
+     * DescriÃ§Ã£o: Esta funÃ§Ã£o lÃª o csv e alimenta a
      * estrutura de dados NINA_CsvFile.
      */
     void NINA_CsvFileReader();
