@@ -2,10 +2,7 @@
 
 function setgov()
 {
-	for i in {0..40};
-	do 
-		cpufreq-set -c "$i" -g $1;
-	done
+    echo "$1" | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 }
 
 setgov "userspace"
