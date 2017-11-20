@@ -195,26 +195,26 @@ ls teste_1/expData/
 cd teste_1/scripts/
 Rscript step1_configurationFileExport.r
 cat ../expData/configurationFile.csv
-#+end_src
+,#+end_src
 
-#+RESULTS:
+,#+RESULTS:
 : "","lines","maxFreq","region","file"
 : "1","117",FALSE,"!$omp parallel ","strassen.c"
 : "2","117",FALSE,"!$omp parallel ","strassen.c"
 : "3","117",FALSE,"!$omp parallel ","strassen.c"
 : "4","117",FALSE,"!$omp parallel ","strassen.c"
 
-#+begin_src sh :results output :exports both
-cat $HOME/svn/libnina/teste_1/expData/configurationFile.csv | cut -d ',' -f2,3,4,5 | sed 's/["!\$\ ]*//g' | sed 's/omp//g' |sed 's/implicit[[:space:]]barrier/imp/g' | sed 's/parallel/par/g' | sed 's/FALSE/1200/g' | sed 's/TRUE/2400/g' | sed -e "1d" | sed '/NA/d' > $HOME/svn/libnina/teste_1/expData/ninaFileInput.csv
+,#+begin_src sh :results output :exports both
+cat $HOME/svn/libnina/teste_1/expData/configurationFile.csv | cut -d ',' -f2,3,4,5 | sed 's/["!\$\ ]*//g' | sed 's/omp//g' |sed 's/implicit[[:space:]]barrier/imp/g' | sed 's/parallel/par/g' | sed 's/FALSE/12000000000/g' | sed 's/TRUE/24000000000/g' | sed -e "1d" | sed '/NA/d' > $HOME/svn/libnina/teste_1/expData/ninaFileInput.csv
 rm $HOME/svn/libnina/teste_1/expData/configurationFile.csv
 cat $HOME/svn/libnina/teste_1/expData/ninaFileInput.csv
 #+end_src
 
 #+RESULTS:
-: 117,1200,par,strassen.c
-: 117,1200,par,strassen.c
-: 117,1200,par,strassen.c
-: 117,1200,par,strassen.c
+: 117,12000000000,par,strassen.c
+: 117,12000000000,par,strassen.c
+: 117,12000000000,par,strassen.c
+: 117,12000000000,par,strassen.c
 
 - This is a final format to libnina executed strassen program changing
   the frequency according to its regions.
