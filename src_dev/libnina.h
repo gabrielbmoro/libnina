@@ -15,7 +15,7 @@
     #include <stdio.h>
     #include <string.h>
     #include <time.h>
-//#include <cpufreq.h>
+    //#include <cpufreq.h>
 
     #define MAX_FREQUENCY 2340
     #define BUFFER_SIZE 1024
@@ -40,28 +40,11 @@
     } NINA_CsvLine;
 
 
-    /*
-     * Nome: NINA_CsvFile
-     *
-     * Author: Gabriel B Moro
-     *
-     * Descrição: Estrutura de dados responsável por
-     * representar o arquivo csv de configuração.
-     */
-    typedef struct NINA_CsvFile {
-        int 					amountOfLines;
-        NINA_CsvLine 			**bufferOfLines;
-    } NINA_CsvFile;
+    NINA_CsvLine * CsvLineRoot;
 
+	NINA_CsvLine * getValue(char *region, char *file, int start_line);
 
-
-    NINA_CsvFile * CsvFile;
-
-	NINA_CsvFile * hashMapCreate(int size);
-
-	NINA_CsvLine * getValue(NINA_CsvFile *hashmap, char *region, char *file, int start_line);
-
-	NINA_CsvLine * createNewPair(long int freq, int line_start, char * regionName, char * fileName);
+	NINA_CsvLine * createNodo(long int freq, int line_start, char * regionName, char * fileName);
 
     /*
      * Nome: NINA_CHANGEFREQ

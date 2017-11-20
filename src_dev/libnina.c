@@ -12,62 +12,27 @@
 /*
  * Variáveis globais
  */
-int 	isLogServiceEnabled 	= 	1; //1 com log, 0 sem log
+int     amountOfCsvLines        =   0;
+int     isLogServiceEnabled     =   1; //1 com log, 0 sem log
 
+NINA_CsvLine * getValue(char *region, char *file, int start_line) {
 
-NINA_CsvFile * hashMapCreate(int size) {
-	
-	NINA_CsvFile * hashmap = NULL;
+	NINA_CsvLine *tmp = CsvLineRoot;
 
-	int i;
-
-	if(size < 1) return NULL;
-
-	if((hashmap = malloc(sizeof(NINA_CsvFile))) == NULL) {
-		return NULL;
-	}
-
-	if((hashmap->bufferOfLines = malloc(sizeof(NINA_CsvLine *) * size)) == NULL) {
-		return NULL;
-	}
-
-	for(i = 0; i < size; i++) {
-		hashmap->bufferOfLines[i] = NULL;
-	}
-
-	hashmap->amountOfLines = size;
-
-	return hashmap;
-}
-
-
-
-NINA_CsvLine * getValue(NINA_CsvFile *hashmap, char *region, char *file, int start_line) {
-
-	NINA_CsvLine * tmp = hashmap->bufferOfLines[0];
-
-	while(tmp == NULL || tmp->regionName == NULL || (strcmp(region, tmp->regionName) !=0)) {
-
-		if(start_line == tmp->line_start && strstr(file, tmp->fileName) !=NULL && strcmp(region,tmp->regionName)==0) {
-			break;
-		}
-
-		if(tmp->next == NULL){
-			break;	
-		}
-
-		tmp = tmp->next;
-
-	}
-
-	if(tmp == NULL || tmp->regionName == NULL){
+	if(tmp == NULL || tmp->regionName == NULL || (strcmp(region, tmp->regionName) !=0)) {
 		return NULL;
 	} else {
-		return tmp;
+
+		if(start_line == tmp->line_start && strstr(file, tmp->fileName) !=NULL && strcmp(region,tmp->regionName)==0) {
+			CsvLineRoot = CsvLineRoot->next;
+			return tmp;
+		} else {
+			return NULL;
+		}
 	}
 }
 
-NINA_CsvLine * createNewPair(long int freq, int line_start, char * regionName, char * fileName) {
+NINA_CsvLine * createNodo(long int freq, int line_start, char * regionName, char * fileName) {
 	
 	NINA_CsvLine *newPair;
 	
@@ -136,7 +101,7 @@ void NINA_CALL(char *region, char *file, int start_line) {
 
 	}
 
-	NINA_CsvLine * tmp = getValue(CsvFile, region, file, start_line);
+	NINA_CsvLine * tmp = getValue(region, file, start_line);
 
 	if(tmp != NULL){
 
@@ -210,6 +175,7 @@ void NINA_maxFrequencyOfProcessor() {
 void NINA_CsvFileReader() {
 	
 	char *time = (char *) malloc(BUFFER_SIZE * sizeof(char));
+
 /*
 	if(isLogServiceEnabled){
 		NINA_GET_TIME(time);
@@ -237,7 +203,7 @@ void NINA_CsvFileReader() {
 
 		FILE *arq;
 
-		filePath = "/home/gabrielbmoro/svn/libnina/src_dev/ninaFileInput.csv";
+		filePath = "/home/gbmoro/svn/libnina/src_dev/ninaFileInput.csv";
 
 		arq = fopen(filePath, "r");
 
@@ -255,11 +221,7 @@ void NINA_CsvFileReader() {
 
 		}
 
-		int amountOfLines = NINA_GetSizeOfFile(filePath);
-
-		CsvFile = hashMapCreate(amountOfLines);
-		
-		CsvFile->amountOfLines = amountOfLines;
+		amountOfCsvLines = NINA_GetSizeOfFile(filePath);
 
 		int count = 0;
 
@@ -267,31 +229,51 @@ void NINA_CsvFileReader() {
 
 		int start_lineTmp = 0;
 		
-		NINA_CsvLine * tmp;                
+		NINA_CsvLine * tmp;             
 
-		while(count < CsvFile->amountOfLines) {
+		while(count < amountOfCsvLines) {
 
             fscanf(arq, "%d,%ld,%s,%s\n",&start_lineTmp,&freqTmp,&regionNameTmp,&fileNameTmp);
 
-            tmp = createNewPair(freqTmp,start_lineTmp,regionNameTmp,fileNameTmp);
-			
-			CsvFile->bufferOfLines[count] = tmp;
-			
-			if(isLogServiceEnabled) {
-				NINA_GET_TIME(time);
+            if(count == 0){
+            
+            	CsvLineRoot = createNodo(freqTmp,start_lineTmp,regionNameTmp,fileNameTmp);
 
-				printf("%s: ->NINA_CsvFileReader: l%d regionName %s, fileName %s, start_line %d, freq_tmp %ld...\n", time, count, 
-					tmp->regionName, tmp->fileName, tmp->line_start, tmp->freq);
-			}
-			
-			if(count > 0) {
-				CsvFile->bufferOfLines[count-1]->next = tmp;
+            	if(isLogServiceEnabled) {
+					NINA_GET_TIME(time);
+
+					printf("%s: ->NINA_CsvFileReader: l%d regionName %s, fileName %s, start_line %d, freq_tmp %ld...\n", time, count, 
+						CsvLineRoot->regionName, CsvLineRoot->fileName, CsvLineRoot->line_start, CsvLineRoot->freq);
+				}
+
+				CsvLineRoot->next = NULL;
+
+            } else {
+
+            	if(count == 1){
+            		tmp = createNodo(freqTmp,start_lineTmp,regionNameTmp,fileNameTmp);
+					CsvLineRoot->next = tmp;
+					tmp->next = NULL;
+				} else {
+					NINA_CsvLine * tempX = tmp;
+					tmp = createNodo(freqTmp,start_lineTmp,regionNameTmp,fileNameTmp);
+					tempX->next = tmp;
+					tmp->next = NULL;
+				}
+
+            	if(isLogServiceEnabled) {
+					NINA_GET_TIME(time);
+
+					printf("%s: ->NINA_CsvFileReader: l%d regionName %s, fileName %s, start_line %d, freq_tmp %ld...\n", time, count, 
+						tmp->regionName, tmp->fileName, tmp->line_start, tmp->freq);
+				}				
+
 			}
 
 			count++;
+
 		}
 
-		
 		if(isLogServiceEnabled) {
 			NINA_GET_TIME(time);
 
