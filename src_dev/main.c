@@ -1,13 +1,15 @@
-#include <stdio.h>
+
 #include <stdlib.h>
+#include <stdio.h>
 #include "libnina.h"
 
-int main() {
+int main(int argc, const char* argv[]){
+	
+	readerOfConfigurationFile();
 
+	printList();
 
-  NINA_CsvFileReader();
+	freeMemoryData();
 
-  return 0;
-  
-  
+	return 0;
 }

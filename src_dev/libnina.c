@@ -9,159 +9,93 @@
 
 #include "libnina.h"
 
-/*
- * Variáveis globais
- */
-int 	isLogServiceEnabled 	= 	1; //1 com log, 0 sem log
+ParallelRegionsFile       *head                   = NULL;
 
+void insertInList(char * name) {
 
-NINA_CsvFile * hashMapCreate(int size) {
-	
-	NINA_CsvFile * hashmap = NULL;
+	ParallelRegionsFile * new;
 
-	int i;
+	new = malloc(sizeof(struct ParallelRegionsFile));
 
-	if(size < 1) return NULL;
+	new->name = malloc(BUFFER_SIZE * sizeof(char));
 
-	if((hashmap = malloc(sizeof(NINA_CsvFile))) == NULL) {
-		return NULL;
-	}
+	memcpy(new->name, name, BUFFER_SIZE);
 
-	if((hashmap->bufferOfLines = malloc(sizeof(NINA_CsvLine *) * size)) == NULL) {
-		return NULL;
-	}
+	new->hash = hashmapCreate(256);
 
-	for(i = 0; i < size; i++) {
-		hashmap->bufferOfLines[i] = NULL;
-	}
+	new->next = head;
 
-	hashmap->amountOfLines = size;
+	head = new;
 
-	return hashmap;
 }
 
+ParallelRegionsFile * deleteFirst() {
 
+	ParallelRegionsFile * tmpNode = head;
 
-NINA_CsvLine * getValue(NINA_CsvFile *hashmap, char *region, char *file, int start_line) {
+	head = head->next;
 
-	NINA_CsvLine * tmp = hashmap->bufferOfLines[0];
+	return tmpNode;
+}
 
-	while(tmp == NULL || tmp->regionName == NULL || (strcmp(region, tmp->regionName) !=0)) {
+int isListEmpty() {
+	return (head == NULL);
+}
 
-		if(start_line == tmp->line_start && strstr(file, tmp->fileName) !=NULL && strcmp(region,tmp->regionName)==0) {
-			break;
+ParallelRegionsFile * find(char * name) {
+	ParallelRegionsFile * current = malloc(sizeof(ParallelRegionsFile));
+
+	current = head;
+
+	if(head == NULL) {
+		return NULL;
+	}
+
+	while(strcmp(current->name, name) !=0) {
+		if(current->next == NULL) {
+			return NULL;
+		} else {
+			current = current->next;
 		}
+	}
 
-		if(tmp->next == NULL){
-			break;	
-		}
+	return current;
+}
 
+void freeMemoryData() {
+	if(isListEmpty){
+		return;
+	}
+
+	ParallelRegionsFile * current = NULL;
+
+	while(head != NULL) {
+		hashmapDelete(head->hash);
+		current = head;
+		head = head->next;
+		free(current);
+	}
+}
+
+void printList() {
+
+	ParallelRegionsFile * tmp = head;
+
+	while(tmp!=NULL) {
+		printf("---------------------------\n");
+		printf("File name node %s\n", tmp->name);
+		printf("Count of Hash %ld\n",hashmapCount(tmp->hash));
+		printf("---------------------------\n\n");
 		tmp = tmp->next;
-
 	}
 
-	if(tmp == NULL || tmp->regionName == NULL){
-		return NULL;
-	} else {
-		return tmp;
-	}
 }
 
-NINA_CsvLine * createNewPair(long int freq, int line_start, char * regionName, char * fileName) {
-	
-	NINA_CsvLine *newPair;
-	
-	newPair = malloc(sizeof(NINA_CsvLine));
-
-    newPair->freq = freq;
-    newPair->line_start = line_start;
-    newPair->regionName = malloc(sizeof(char) * BUFFER_REGION);
-    newPair->fileName = malloc(sizeof(char) * BUFFER_LINE);
-
-    memcpy(newPair->regionName,regionName,BUFFER_REGION);
-	memcpy(newPair->fileName,fileName,BUFFER_LINE);
-
-	newPair->next = NULL;
-
-	return newPair;
-
-}
-
-void NINA_CHANGEFREQ(long int freq) {
-
-  /*	int cpufreqReturnedFirst = -1, cpufreqReturnedLast = -1;
-
-	char *time = (char *) malloc(BUFFER_SIZE * sizeof(char));
-	
-	cpufreqReturnedFirst = cpufreq_set_frequency(0, freq);
-	cpufreqReturnedLast = cpufreq_set_frequency(AMOUNT_OF_CPUS-1, freq);
-
-	if(cpufreqReturnedFirst < 0){
-			NINA_GET_TIME(time);
-			printf("%s -> NINA_CHANGEFREQ: it is impossible to change the CPU frequency. It's necessary the userspace governor...\n", time);
-			free(time);
-			exit(0);
-	} else {
-		if(isLogServiceEnabled){		
-			NINA_GET_TIME(time);
-			printf("%s: ->NINA_CHANGEFREQ: %d freq changed is %d \n",time,0,cpufreqReturnedFirst);
-			printf("%s: ->NINA_CHANGEFREQ: %d freq changed is %d \n",time,AMOUNT_OF_CPUS-1,cpufreqReturnedLast);
-			free(time);
-		}
-		}	*/
-}
-
-void * NINA_GET_TIME(char * strReturned) {
-
-	time_t t =  time(NULL);
-	struct tm tm = *localtime(&t);
-
-	sprintf(strReturned, "%.2d.%.2d.%.4d.%.2dh%.2dm%.2ds",tm.tm_mday,tm.tm_mon + 1, 
-		tm.tm_year + 1900, tm.tm_hour,tm.tm_min,tm.tm_sec);
-
-}
-
-void NINA_CALL(char *region, char *file, int start_line) {
-	///////////////////////////////////////////////////////////////////////////
-	// Aqui vai acontecer a magia, primeiramente vou verificar se o region id
-	//  é de uma região memory-bound, depois disso, vou recuperar o número da
-	//  linha pela estrutura my_region_info disponibilizada pela ferramenta opari2.
-	//  O primeiro teste que vou fazer é imprimir informações sobre a região alvo.
-
-	char *time = (char *) malloc(BUFFER_SIZE * sizeof(char));
-
-	if(isLogServiceEnabled){
-
-		NINA_GET_TIME(time);
-
-	}
-
-	NINA_CsvLine * tmp = getValue(CsvFile, region, file, start_line);
-
-	if(tmp != NULL){
-
-		printf("%s: ->NINA_CALL: I was called... at %s -> %s:%d\n",
-			time,
-			tmp->regionName,
-			tmp->fileName,
-			tmp->line_start);
-
-
-		NINA_CHANGEFREQ(tmp->freq);	
-
-	}
-
-	free(time);
-}
-
-int NINA_GetSizeOfFile(char *filePath) {
+int getFileSize(char *filePath) {
 
 	FILE *arq;
 
 	int ch, lines = 0;
-	
-	char *time = (char *) malloc(BUFFER_SIZE * sizeof(char));
-
 
 	arq = fopen(filePath, "r");
 
@@ -177,130 +111,54 @@ int NINA_GetSizeOfFile(char *filePath) {
 
 	fclose(arq);
 
-
-	if(isLogServiceEnabled){
-		NINA_GET_TIME(time);
-
-		printf("%s: ->NINA_GetSizeOfFile: NINA_Amount of lines in file: %d\n", time, lines);
-	}
-
-	free(time);
-
 	return lines;
 }
 
 
-void NINA_maxFrequencyOfProcessor() {
+void readerOfConfigurationFile(){
 
-/*	char *time = (char *) malloc(BUFFER_SIZE * sizeof(char));
+	FILE *arq;
+
+	char *filePath = malloc(BUFFER_LINE * sizeof(char));
+
+	filePath = "/home/gbmoro/svn/libnina/src_dev/ninaFileInput.csv";
+
+	arq = fopen(filePath, "r");
+
+	char *fileNameTmp = malloc(BUFFER_SIZE * sizeof(char));
 	
-	if(isLogServiceEnabled){
-		NINA_GET_TIME(time);
+	int start_lineTmp = 0;
+	
+	long int freqTmp = 0;
+
+	ParallelRegionsFile *current;
+	
+	int	amountOfLines = getFileSize(filePath);
+
+	int count = 0;
+
+	while(count < amountOfLines) {
+
+		fscanf(arq,"%d,%ld,%s\n",&start_lineTmp,&freqTmp,fileNameTmp);
 		
-		printf("%s: ->NINA_maxFrequencyOfProcessor: The frequency will be set to max\n",time);
+		current = find(fileNameTmp);
+
+		if(current==NULL) {
+
+			insertInList(fileNameTmp);
+
+			hashmapInsert(head->hash, &freqTmp, start_lineTmp);
+	
+		} else {
+	
+			hashmapInsert(current->hash, &freqTmp, start_lineTmp);
+	
+		}
+
+		count++;
+
 	}
 
-	NINA_CHANGEFREQ(MAX_FREQUENCY);
+	fclose(arq);
 
-	free(time);
-*/
-
-}
-
-void NINA_CsvFileReader() {
-	
-	char *time = (char *) malloc(BUFFER_SIZE * sizeof(char));
-/*
-	if(isLogServiceEnabled){
-		NINA_GET_TIME(time);
-
-		printf("%s: ->NINA_CsvFileReader: csvFileReader -> begin ...\n",time);
-	}
-
-	if(getenv("NINA_CONFIG") == NULL) {
-
-		if(isLogServiceEnabled){
-			NINA_GET_TIME(time);
-			
-			printf(
-				"%s: ->NINA_CsvFileReader: The environment variable called NINA_CONFIG is as NULL...\n",time
-				);
-		}
-
-	} else {*/
-
-		char regionNameTmp[BUFFER_REGION];
-		
-		char fileNameTmp[BUFFER_SIZE];
-		
-		char *filePath = malloc(BUFFER_LINE * sizeof(char));
-
-		FILE *arq;
-
-		filePath = "/home/gabrielbmoro/svn/libnina/src_dev/ninaFileInput.csv";
-
-		arq = fopen(filePath, "r");
-
-		if(isLogServiceEnabled) {
-
-			NINA_GET_TIME(time);
-
-			printf("%s: ->NINA_CsvFileReader: The environment variable called NINA_CONFIG is defined...\n",	time);
-			
-			printf("%s: ->NINA_CsvFileReader: The environment variable called NINA_CONFIG is %s...\n",time, filePath);
-
-			NINA_GET_TIME(time);
-
-			printf("%s: ->NINA_CsvFileReader: csvFileReader -> The file was readed %d...\n",time, arq == NULL);
-
-		}
-
-		int amountOfLines = NINA_GetSizeOfFile(filePath);
-
-		CsvFile = hashMapCreate(amountOfLines);
-		
-		CsvFile->amountOfLines = amountOfLines;
-
-		int count = 0;
-
-		long int freqTmp = 0;
-
-		int start_lineTmp = 0;
-		
-		NINA_CsvLine * tmp;                
-
-		while(count < CsvFile->amountOfLines) {
-
-            fscanf(arq, "%d,%ld,%s,%s\n",&start_lineTmp,&freqTmp,&regionNameTmp,&fileNameTmp);
-
-            tmp = createNewPair(freqTmp,start_lineTmp,regionNameTmp,fileNameTmp);
-			
-			CsvFile->bufferOfLines[count] = tmp;
-			
-			if(isLogServiceEnabled) {
-				NINA_GET_TIME(time);
-
-				printf("%s: ->NINA_CsvFileReader: l%d regionName %s, fileName %s, start_line %d, freq_tmp %ld...\n", time, count, 
-					tmp->regionName, tmp->fileName, tmp->line_start, tmp->freq);
-			}
-			
-			if(count > 0) {
-				CsvFile->bufferOfLines[count-1]->next = tmp;
-			}
-
-			count++;
-		}
-
-		
-		if(isLogServiceEnabled) {
-			NINA_GET_TIME(time);
-
-			printf("%s: ->NINA_CsvFileReader: csvFileReader -> end...\n",time);
-		}
-
-		fclose(arq);
-
-		//	}
-	
-	free(time);
 }
