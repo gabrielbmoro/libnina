@@ -73,6 +73,7 @@ s_hashmap * hashmapCreate(int startsize) {
   hm->table = (hEntry*)calloc(sizeof(hEntry), startsize);
   hm->size = startsize;
   hm->count = 0;
+  return hm;
 }
 
 void hashmapInsert(s_hashmap* hash, long* data, unsigned long key)

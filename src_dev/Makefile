@@ -7,7 +7,7 @@ all: exec
 exec.o: main.c
 	gcc $(FLAGS) -o $@ -c $<
 
-exec: libnina.h libnina.c exec.o
+exec: hashmap.h hashmap.c libnina.h libnina.c exec.o
 	gcc $(FLAGS) -o $@ $+
 
 clean:
