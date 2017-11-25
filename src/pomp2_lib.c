@@ -261,8 +261,8 @@ POMP2_Init(void)
         fprintf( stderr, "  0: init\n" );
 
         /*-> My code */
-        NINA_maxFrequencyOfProcessor();
-        NINA_CsvFileReader();
+        changeProcessorsFrequencyToMax();
+        readerOfConfigurationFile();
         /*My code <-*/
 
         int n_pomp2_regions = POMP2_Get_num_regions() + POMP2_USER_Get_num_regions();
@@ -636,7 +636,7 @@ POMP2_Parallel_begin( POMP2_Region_handle* pomp2_handle)
 
       /*-> My code */
       my_pomp2_region* region = *pomp2_handle;
-      NINA_CALL("par", region->start_file_name, region->start_line_1);
+      callByNINALibrary(region->start_file_name, region->start_line_1);
       /*My code <-*/
     }
 }
@@ -655,7 +655,7 @@ POMP2_Parallel_end( POMP2_Region_handle* pomp2_handle )
       fprintf( stderr, "%3d: end parallel %s:%d-%d\n", omp_get_thread_num(), r->start_file_name, r->start_line_1, r->end_line_1 );
 
         /*-> My code */
-        NINA_maxFrequencyOfProcessor();
+        changeProcessorsFrequencyToMax();
        /*My code <-*/
     }
 }

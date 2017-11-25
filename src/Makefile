@@ -9,7 +9,7 @@ LDFLAGS += -shared  # linking flags
 RM = rm -f  # rm command
 TARGET_LIB = libnina.so # target lib
 
-SRCS = libnina.c pomp2_lib.c pomp2_user_region_info.c pomp2_region_info.c opari2_ctc_parser.c
+SRCS = hashmap.c libnina.c pomp2_lib.c pomp2_user_region_info.c pomp2_region_info.c opari2_ctc_parser.c
 OBJS = $(SRCS:.c=.o)
 
 .PHONY: all
