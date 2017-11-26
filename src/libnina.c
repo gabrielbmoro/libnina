@@ -133,6 +133,25 @@ int randomNumberBetweenMinMax(int min, int max){
 
 void changeProcessorsFrequency(long freq) {
 	int cpufreqReturned = -1;
+	int count = 0;
+
+	#pragma omp parallel for schedule(static) private(count)
+	for(count = 0; count < amountOfCPUS; count++) {
+		cpufreqReturned = cpufreq_set_frequency(count, freq);
+
+		if(cpufreqReturned < 0){
+				printf("libnina->changeProcessorsFrequency: libnina need userspace governor to change the processor's frequency\n");
+				exit(0);
+		}
+
+		if(isItTheLogServiceEnabled)
+			printf("libnina->changeProcessorsFrequency: CPU%d to freq %ld, -> %d\n", count, freq, cpufreqReturned);
+	}
+
+}
+
+void changeRandomProcessorsFrequency(long freq) {
+	int cpufreqReturned = -1;
 	int firstCPU = 0;
 	int dividedBy = 2;
 	int minValue = 0;
@@ -147,7 +166,7 @@ void changeProcessorsFrequency(long freq) {
 
 		if(cpufreqReturned < 0){
 				printf("libnina->changeProcessorsFrequency: libnina need userspace governor to change the processor's frequency\n");
-				//exit(0);
+				exit(0);
 		}
 
 		if(isItTheLogServiceEnabled)
@@ -156,7 +175,6 @@ void changeProcessorsFrequency(long freq) {
 		dividedBy += 2;
 		maxValue -= dividedBy;
 	}
-
 }
 
 void callByNINALibrary(char *file, long start_line) {

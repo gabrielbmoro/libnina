@@ -47,6 +47,8 @@
 
   void changeProcessorsFrequency(long freq);
 
+  void changeRandomProcessorsFrequency(long freq);
+
   void callByNINALibrary(char *file, long start_line);
 
   void changeProcessorsFrequencyToMax();
