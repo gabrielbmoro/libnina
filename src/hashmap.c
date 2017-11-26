@@ -10,7 +10,7 @@
 static unsigned long isPrime(unsigned long val)
 {
   int i, p, exp, a;
-  
+
   for (i = 9; i--;)
   {
     a = (rand() % (val-4)) + 2;
@@ -20,15 +20,15 @@ static unsigned long isPrime(unsigned long val)
     {
       if (exp & 1)
         p = (p*a)%val;
-      
+
       a = (a*a)%val;
       exp >>= 1;
     }
-    
+
     if (p != 1)
       return 0;
   }
-  
+
   return 1;
 }
 
@@ -38,10 +38,10 @@ static int findPrimeGreaterThan(int val)
     val+=2;
   else
     val++;
-  
+
   while (!isPrime(val))
     val+=2;
-  
+
   return val;
 }
 
@@ -49,27 +49,27 @@ static void rehash(s_hashmap* hm)
 {
   long size = hm->size;
   hEntry* table = hm->table;
-  
+
   hm->size = findPrimeGreaterThan(size<<1);
   hm->table = (hEntry*)calloc(sizeof(hEntry), hm->size);
   hm->count = 0;
-  
+
   while(--size >= 0)
     if (table[size].flags == ACTIVE)
       hashmapInsert(hm, table[size].data, table[size].key);
-  
+
   free(table);
 }
 
-s_hashmap * hashmapCreate(int startsize) {  
-  
+s_hashmap * hashmapCreate(int startsize) {
+
   s_hashmap* hm = (s_hashmap*)malloc(sizeof(s_hashmap));
 
   if (!startsize)
     startsize = TABLE_STARTSIZE;
   else
     startsize = findPrimeGreaterThan(startsize-2);
-  
+
   hm->table = (hEntry*)calloc(sizeof(hEntry), startsize);
   hm->size = startsize;
   hm->count = 0;
@@ -79,15 +79,15 @@ s_hashmap * hashmapCreate(int startsize) {
 void hashmapInsert(s_hashmap* hash, long* data, unsigned long key)
 {
   long index, i, step;
-  
+
   if (hash->size <= hash->count)
     rehash(hash);
-  
+
   do
   {
     index = key % hash->size;
     step = (key % (hash->size-2)) + 1;
-    
+
     for (i = 0; i < hash->size; i++)
     {
       if (hash->table[index].flags & ACTIVE)
@@ -106,10 +106,10 @@ void hashmapInsert(s_hashmap* hash, long* data, unsigned long key)
         ++hash->count;
         return;
       }
-      
+
       index = (index + step) % hash->size;
     }
-    
+
     /* it should not be possible that we EVER come this far, but unfortunately
        not every generated prime number is prime (Carmichael numbers...) */
     rehash(hash);
@@ -120,10 +120,10 @@ void hashmapInsert(s_hashmap* hash, long* data, unsigned long key)
 long* hashmapRemove(s_hashmap* hash, unsigned long key)
 {
   long index, i, step;
-  
+
   index = key % hash->size;
   step = (key % (hash->size-2)) + 1;
-  
+
   for (i = 0; i < hash->size; i++)
   {
     if (hash->table[index].data)
@@ -142,7 +142,7 @@ long* hashmapRemove(s_hashmap* hash, unsigned long key)
     }
     else /* found an empty place (can't be in) */
       return 0;
-    
+
     index = (index + step) % hash->size;
   }
   /* everything searched through, but not in */
@@ -156,7 +156,7 @@ long* hashmapGet(s_hashmap* hash, unsigned long key)
     long index, i, step;
     index = key % hash->size;
     step = (key % (hash->size-2)) + 1;
-    
+
     for (i = 0; i < hash->size; i++)
     {
       if (hash->table[index].key == key)
@@ -168,11 +168,11 @@ long* hashmapGet(s_hashmap* hash, unsigned long key)
       else
         if (!hash->table[index].data)
           break;
-      
+
       index = (index + step) % hash->size;
     }
   }
-  
+
   return 0;
 }
 

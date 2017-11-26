@@ -246,6 +246,10 @@ POMP2_Finalize(void)
         pomp2_finalize_called = 1;
         fprintf( stderr, "  0: finalize\n" );
     }
+
+    /*My code*/
+    freeMemoryData();
+    /*My code*/
 }
 
 void
@@ -261,8 +265,8 @@ POMP2_Init(void)
         fprintf( stderr, "  0: init\n" );
 
         /*-> My code */
+        initLibrary();
         changeProcessorsFrequencyToMax();
-        readerOfConfigurationFile();
         /*My code <-*/
 
         int n_pomp2_regions = POMP2_Get_num_regions() + POMP2_USER_Get_num_regions();

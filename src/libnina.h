@@ -14,18 +14,17 @@
   #include <stdbool.h>
   #include <string.h>
   #include <cpufreq.h>
+  #include <time.h>
   #include "hashmap.h"
 
-  #define MAX_FREQUENCY 2340000
   #define BUFFER_SIZE 1024
   #define BUFFER_LINE 200
   #define INIT_HASH_SIZE 256
-  #define AMOUNT_OF_CPUS 40
 
   typedef struct ParallelRegionsFile {
-    char *name;
-    s_hashmap *hash;
-    struct ParallelRegionsFile *next;
+    char                         *name;
+    s_hashmap                    *hash;
+    struct ParallelRegionsFile   *next;
   } ParallelRegionsFile;
 
   void insertInList(char * name);
@@ -42,11 +41,13 @@
 
   int getFileSize(char *filePath);
 
-  void readerOfConfigurationFile();
+  int randomNumberBetweenMinMax(int min, int max);
 
-  void changeProcessorsFrequency(long int freq);
+  void initLibrary();
 
-  void callByNINALibrary(char *file, unsigned long start_line);
+  void changeProcessorsFrequency(long freq);
+
+  void callByNINALibrary(char *file, long start_line);
 
   void changeProcessorsFrequencyToMax();
 
