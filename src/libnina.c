@@ -14,14 +14,14 @@ bool                  isItTheLogServiceEnabled  = true;
 int                   amountOfCPUS              = 4;
 long                  maxFrequency              = 1200000;
 
-void insertInList(char * name) {
+void insertInList(char * name, int hashSize) {
 	ParallelRegionsFile * new;
 	new = malloc(sizeof(struct ParallelRegionsFile));
 	new->name = malloc(BUFFER_SIZE * sizeof(char));
 
 	memcpy(new->name, name, BUFFER_SIZE);
 
-	new->hash = hashmapCreate(256);
+	new->hash = hashmapCreate(hashSize);
 	new->next = head;
 	head = new;
 
@@ -235,7 +235,7 @@ void initLibrary(){
 
 			if(current==NULL) {
 
-				insertInList(fileNameTmp);
+				insertInList(fileNameTmp, amountOfLines);
 
 				hashmapInsert(head->hash, freqTmp, start_lineTmp);
 

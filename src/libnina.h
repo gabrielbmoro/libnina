@@ -27,7 +27,7 @@
     struct ParallelRegionsFile   *next;
   } ParallelRegionsFile;
 
-  void insertInList(char * name);
+  void insertInList(char * name, int hashSize);
 
   ParallelRegionsFile * deleteFirst();
 
