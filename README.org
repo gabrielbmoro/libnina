@@ -253,6 +253,9 @@ ls
 #+begin_src sh :results output :exports both
 cd teste_1/src/
 
+export NINA_MAX_FREQUENCY=2300000
+export NINA_AMOUNT_OF_CPUS=40
+export NINA_LOG="something"
 export NINA_CONFIG=/home/gbmoro/svn/libnina/teste_1/expData/ninaFileInput.csv
 
 sudo -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gbmoro/svn/libnina/src/ ./strassen_c_inst
@@ -411,20 +414,26 @@ cd teste_2/src/
 echo "MEMORY EVALUATION----------------------------->" 
 echo ""
 echo "Execution with libnina, energy-mem"
-export NINA_CONFIG=/home/gabrielbmoro/svn/libnina/teste_2/expData/ninaFileInput.csv
+export NINA_MAX_FREQUENCY=2300000
+export NINA_AMOUNT_OF_CPUS=40
+export NINA_LOG="something"
+export NINA_CONFIG=/home/gbmoro/svn/libnina/teste_1/expData/ninaFileInput.csv
 sudo -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gabrielbmoro/svn/libnina/src/ perf stat -a -e \"power/energy-ram/\" ./strassen_c_inst 8148 2> output.txt
-echo "$(cat output.txt | grep -i Joules | awk ' { print $1 } ')'
+echo "$(cat output.txt | grep -i Joules | awk ' { print $1 } ')'"
 echo ""
 echo "Execution without libnina, energy-mem"
 sudo -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gabrielbmoro/svn/libnina/src/ perf stat -a -e \"power/energy-ram/\" ./strassen_c 8148 2> output.txt
-echo "$(cat output.txt | grep -i Joules | awk ' { print $1 } ')'
+echo "$(cat output.txt | grep -i Joules | awk ' { print $1 } ')'"
 echo "<--------------------------------------------"
 echo ""
 echo ""
 echo "CPU EVALUATION----------------------------->" 
 echo ""
 echo "Execution with libnina, energy-pkg"
-export NINA_CONFIG=/home/gabrielbmoro/svn/libnina/teste_2/expData/ninaFileInput.csv
+export NINA_MAX_FREQUENCY=2300000
+export NINA_AMOUNT_OF_CPUS=40
+export NINA_LOG="something"
+export NINA_CONFIG=/home/gbmoro/svn/libnina/teste_1/expData/ninaFileInput.csv
 sudo -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gabrielbmoro/svn/libnina/src/ perf stat -a -e \"power/energy-pkg/\" ./strassen_c_inst 8148 2> output.txt
 echo "$(cat output.txt | grep -i Joules | awk ' { print $1 } ')"
 echo ""
