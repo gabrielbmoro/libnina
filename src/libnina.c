@@ -10,7 +10,7 @@
 #include "libnina.h"
 
 ParallelRegionsFile   *head                     = NULL;
-bool                  isItTheLogServiceEnabled  = true;
+int                   isItTheLogServiceEnabled  = 0;
 int                   amountOfCPUS              = 4;
 long                  maxFrequency              = 1200000;
 
