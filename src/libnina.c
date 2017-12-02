@@ -10,7 +10,7 @@
 #include "libnina.h"
 
 ParallelRegionsFile   *head                     = NULL;
-bool                  isItTheLogServiceEnabled  = true;
+bool                  isItTheLogServiceEnabled  = false;
 int                   amountOfCpus              = 0;
 long                  maxFrequency              = 1200000;
 int                   *targetCPUS               = NULL;
@@ -86,6 +86,9 @@ void freeMemoryData() {
 		head = head->next;
 		free(current);
 	}
+
+	if(targetCPUS != NULL)
+		free(targetCPUS);
 
 	if(isItTheLogServiceEnabled)
 		printf("%d_libnina->freeMemoryData\n");
