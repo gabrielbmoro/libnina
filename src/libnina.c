@@ -10,9 +10,10 @@
 #include "libnina.h"
 
 ParallelRegionsFile   *head                     = NULL;
-int                   isItTheLogServiceEnabled  = 0;
-int                   amountOfCPUS              = 4;
+bool                  isItTheLogServiceEnabled  = true;
+int                   amountOfCpus              = 0;
 long                  maxFrequency              = 1200000;
+int                   *targetCPUS               = NULL;
 
 void insertInList(char * name, int hashSize) {
 	ParallelRegionsFile * new;
@@ -135,46 +136,17 @@ void changeProcessorsFrequency(long freq) {
 	int cpufreqReturned = -1;
 	int count = 0;
 
-	#pragma omp parallel for schedule(static) private(count)
-	for(count = 0; count < amountOfCPUS; count++) {
-		cpufreqReturned = cpufreq_set_frequency(count, freq);
-
-		if(cpufreqReturned < 0){
-				printf("libnina->changeProcessorsFrequency: libnina need userspace governor to change the processor's frequency\n");
-				exit(0);
-		}
-
+	for(count = 0; count < amountOfCpus; count++) {
+		cpufreqReturned = cpufreq_set_frequency(targetCPUS[count], freq);
 		if(isItTheLogServiceEnabled)
-			printf("libnina->changeProcessorsFrequency: CPU%d to freq %ld, -> %d\n", count, freq, cpufreqReturned);
+			printf("%d_libnina->changeFreq: returned is %d of processor %d\n", cpufreqReturned, targetCPUS[count]);
 	}
 
-}
-
-void changeRandomProcessorsFrequency(long freq) {
-	int cpufreqReturned = -1;
-	int firstCPU = 0;
-	int dividedBy = 2;
-	int minValue = 0;
-	int maxValue = amountOfCPUS;
-	int random = 0;
-
-	while ((minValue = maxValue / dividedBy) > 0) {
-
-		random = randomNumberBetweenMinMax(minValue, maxValue);
-
-		cpufreqReturned = cpufreq_set_frequency(random, freq);
-
-		if(cpufreqReturned < 0){
-				printf("libnina->changeProcessorsFrequency: libnina need userspace governor to change the processor's frequency\n");
-				exit(0);
-		}
-
-		if(isItTheLogServiceEnabled)
-			printf("libnina->changeProcessorsFrequency: CPU%d to freq %ld, -> %d\n", random, freq, cpufreqReturned);
-
-		dividedBy += 2;
-		maxValue -= dividedBy;
+	if(cpufreqReturned != 0) {
+		printf("libnina->changeProcessorsFrequency: Problems to change processor's frequency...\n");
+		exit(0);
 	}
+
 }
 
 void callByNINALibrary(char *file, long start_line) {
@@ -191,21 +163,62 @@ void callByNINALibrary(char *file, long start_line) {
 
 }
 
+int * convertStringToIntegerArray(char * str) {
+
+	char **res = NULL;
+
+	char * p = strtok(str, ",");
+
+	int n_spaces = 0, i;
+
+	while(p) {
+		res = realloc(res, sizeof(char *) * ++n_spaces);
+		if(res == NULL)
+			exit(-1);
+		res[n_spaces - 1] = p;
+		p = strtok(NULL, ",");
+	}
+	res = realloc(res, sizeof(char *) * (n_spaces + 1));
+	res[n_spaces] = 0;
+
+	int * numbers = malloc(sizeof(int) * n_spaces);
+
+	for(i = 0; i < n_spaces; ++i)
+		numbers[i] = atoi(res[i]);
+
+	free(res);
+	return numbers;
+}
+
 void changeProcessorsFrequencyToMax() {
 	changeProcessorsFrequency(maxFrequency);
 }
 
 void initLibrary(){
-	if(getenv("NINA_CONFIG") == NULL || getenv("NINA_MAX_FREQUENCY") == NULL || getenv("NINA_AMOUNT_OF_CPUS") == NULL) {
+	if((getenv("NINA_CONFIG") == NULL)
+			|| (getenv("NINA_MAX_FREQUENCY") == NULL)
+			|| (getenv("NINA_TARGET_CPUS") == NULL)
+			|| (getenv("NINA_AMOUNT_OF_CPUS") == NULL)) {
 
-		printf("libnina->initLibrary: It is necessary to define the environment variables NINA_CONFIG, NINA_MAX_FREQUENCY, and NINA_AMOUNT_OF_CPUS... \n");
+		printf("libnina->initLibrary: It is necessary to define the environment variables NINA_CONFIG, NINA_MAX_FREQUENCY, NINA_AMOUNT_OF_CPUS, and NINA_TARGET_CPUS... \n");
+
+		exit(0);
 
 	} else {
-		amountOfCPUS = atoi(getenv("NINA_AMOUNT_OF_CPUS"));
 
 		maxFrequency = atol(getenv("NINA_MAX_FREQUENCY"));
 
+		amountOfCpus = atoi(getenv("NINA_AMOUNT_OF_CPUS"));
+
 		isItTheLogServiceEnabled = (getenv("NINA_LOG") != NULL);
+
+		char * str = malloc(sizeof(char) * 40);
+
+		str = getenv("NINA_TARGET_CPUS");
+
+		targetCPUS = convertStringToIntegerArray(str);
+
+		if(targetCPUS == NULL) exit(0);
 
 		FILE *arq;
 

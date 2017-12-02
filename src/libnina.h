@@ -15,6 +15,7 @@
   #include <string.h>
   #include <cpufreq.h>
   #include <time.h>
+  #include <stdbool.h>
   #include "hashmap.h"
 
   #define BUFFER_SIZE 1024
@@ -46,8 +47,6 @@
   void initLibrary();
 
   void changeProcessorsFrequency(long freq);
-
-  void changeRandomProcessorsFrequency(long freq);
 
   void callByNINALibrary(char *file, long start_line);
 
