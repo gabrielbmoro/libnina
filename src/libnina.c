@@ -91,7 +91,7 @@ void freeMemoryData() {
 		free(targetCPUS);
 
 	if(isItTheLogServiceEnabled)
-		printf("%d_libnina->freeMemoryData\n");
+		printf("libnina->freeMemoryData\n");
 
 }
 
@@ -142,7 +142,7 @@ void changeProcessorsFrequency(long freq) {
 	for(count = 0; count < amountOfCpus; count++) {
 		cpufreqReturned = cpufreq_set_frequency(targetCPUS[count], freq);
 		if(isItTheLogServiceEnabled)
-			printf("%d_libnina->changeFreq: returned is %d of processor %d\n", cpufreqReturned, targetCPUS[count]);
+			printf("libnina->changeFreq: returned is %d of processor %d\n", cpufreqReturned, targetCPUS[count]);
 	}
 
 	if(cpufreqReturned != 0) {
