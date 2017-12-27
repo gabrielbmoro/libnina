@@ -111,6 +111,7 @@ OPARI2_CTC_error( CTCData*       obj,
         case CTC_ERROR_Inconsistent_line_numbers:
             printf( "Warning: line numbers not valid. Expected startLineNo1 <= startLineNo2 <= endLineNo1 <= endLineNo2 \n" );
             abort = false;
+	    break;
         case CTC_ERROR_SCL_error:
             printf( "Error parsing source code location, "
                     "expecting \"filename:lineNo1:lineNo2\".\n" );
