@@ -194,8 +194,8 @@ OPARI2_CTC_freeAndReset( char** freeMe )
     }
 }
 
-static CTCToken
-getCTCTokenFromString( char* token );
+//static CTCToken
+//getCTCTokenFromString( char* token );
 
 static void
 assignSourceCodeLocation( CTCData*  obj,
