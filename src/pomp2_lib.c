@@ -1020,6 +1020,7 @@ POMP2_Taskwait_end( POMP2_Region_handle* pomp2_handle,
         fprintf( stderr, "%3d: end  taskwait\n", omp_get_thread_num() );
         fprintf( stderr, "%3d: resume task: %" PRIu64 "\n", omp_get_thread_num(), pomp2_current_task );
     }
+
 }
 
 /*
