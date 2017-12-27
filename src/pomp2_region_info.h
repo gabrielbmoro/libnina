@@ -58,74 +58,69 @@
  * POMP2_Region_type
  *
  */
-typedef enum /* POMP2_Region_type */
-{
-    POMP2_No_type = 0,
-    POMP2_Atomic,
-    POMP2_Barrier,
-    POMP2_Critical,
-    POMP2_Do,
-    POMP2_Flush,
-    POMP2_For,
-    POMP2_Master,
-    POMP2_Ordered,
-    POMP2_Parallel,
-    POMP2_Parallel_do,
-    POMP2_Parallel_for,
-    POMP2_Parallel_sections,
-    POMP2_Parallel_workshare,
-    POMP2_Sections,
-    POMP2_Single,
-    POMP2_Task,
-    POMP2_Taskuntied,
-    POMP2_Taskwait,
-    POMP2_Workshare
+typedef enum {			/* POMP2_Region_type */
+      POMP2_No_type = 0,
+  POMP2_Atomic,
+  POMP2_Barrier,
+  POMP2_Critical,
+  POMP2_Do,
+  POMP2_Flush,
+  POMP2_For,
+  POMP2_Master,
+  POMP2_Ordered,
+  POMP2_Parallel,
+  POMP2_Parallel_do,
+  POMP2_Parallel_for,
+  POMP2_Parallel_sections,
+  POMP2_Parallel_workshare,
+  POMP2_Sections,
+  POMP2_Single,
+  POMP2_Task,
+  POMP2_Taskuntied,
+  POMP2_Taskwait,
+  POMP2_Workshare
 } POMP2_Region_type;
 
 /** converts regionType into a string
  * @param regionType The regionType to be converted.
  * @return string representation of the region type*/
-const char*
-pomp2RegionType2String( POMP2_Region_type regionType );
+const char *pomp2RegionType2String(POMP2_Region_type regionType);
 
 /**
  * type to store the scheduling type of a for worksharing constuct
  *
  */
-typedef enum
-{
-    POMP2_No_schedule = 0,
-    POMP2_Static,  /* needs chunk size */
-    POMP2_Dynamic, /* needs chunk size */
-    POMP2_Guided,  /* needs chunk size */
-    POMP2_Runtime,
-    POMP2_Auto
+typedef enum {
+  POMP2_No_schedule = 0,
+  POMP2_Static,			/* needs chunk size */
+  POMP2_Dynamic,		/* needs chunk size */
+  POMP2_Guided,			/* needs chunk size */
+  POMP2_Runtime,
+  POMP2_Auto
 } POMP2_Schedule_type;
 
 /** converts scheduleType into a string
  *  @param scheduleType The scheduleType to be converted.
  *  @return string representation of the scheduleType*/
-const char*
-pomp2ScheduleType2String( POMP2_Schedule_type scheduleType );
+const char *pomp2ScheduleType2String(POMP2_Schedule_type scheduleType);
 
 /**
  * type to store the default value data sharing
  *
  */
-typedef enum
-{
-    POMP2_No_defaultSharing = 0,
-    POMP2_None,
-    POMP2_Shared,
-    POMP2_Private,
-    POMP2_Firstprivate
+typedef enum {
+  POMP2_No_defaultSharing = 0,
+  POMP2_None,
+  POMP2_Shared,
+  POMP2_Private,
+  POMP2_Firstprivate
 } POMP2_DefaultSharing_type;
 
 /** converts defaultSharingType into a string
  *  @param defaultSharingType The defaultSharingType to be converted.
  *  @return string representation of the defaultSharingType*/
-const char*
-pomp2defaultSharingType2String( POMP2_DefaultSharing_type defaultSharingType );
+const char *pomp2defaultSharingType2String(POMP2_DefaultSharing_type
+					   defaultSharingType);
 
 /**
  *  @brief This struct stores all information on an OpenMP region, like the
@@ -133,57 +128,55 @@ pomp2defaultSharingType2String( POMP2_DefaultSharing_type defaultSharingType );
  *  ctcString2RegionInfo() can be used to fill this struct with data
  *  from a ctcString.
  */
-typedef struct
-{
+typedef struct {
     /** @name Generic source code information attributes */
-    //@{
+  //@{
     /** Source location info. Needs to be first for the typecasting
      *  from generic OPARI2_Region_info to work. It is included by use
      *  of the macro OPARI2_REGION_INFO to ensure typecasting when
      *  necessary */
-    OPARI2_REGION_INFO
-    //@}
-
+  OPARI2_REGION_INFO
+      //@}
     /** OpenMP specific fields */
-    //@{
+      //@{
     /** Type of the OpenMP region*/
-    POMP2_Region_type mRegionType;
+  POMP2_Region_type mRegionType;
     /**true if a copyin clause is present*/
-    bool              mHasCopyIn;
+  bool mHasCopyIn;
     /**true if a copyprivate clause is present*/
-    bool              mHasCopyPrivate;
+  bool mHasCopyPrivate;
     /**true if an if clause is present*/
-    bool              mHasIf;
+  bool mHasIf;
     /**true if a firstprivate clause is present*/
-    bool              mHasFirstPrivate;
+  bool mHasFirstPrivate;
     /**true if a lastprivate clause is present*/
-    bool              mHasLastPrivate;
+  bool mHasLastPrivate;
     /**true if a nowait clause is present*/
-    bool              mHasNoWait;
+  bool mHasNoWait;
     /**true if a numThreads clause is present*/
-    bool              mHasNumThreads;
+  bool mHasNumThreads;
     /**true if an ordered clause is present*/
-    bool              mHasOrdered;
+  bool mHasOrdered;
     /**true if a reduction clause is present*/
-    bool              mHasReduction;
+  bool mHasReduction;
     /**true if a shared clause is present*/
-    bool              mHasShared;
+  bool mHasShared;
     /**true if a collapse clause is present*/
-    bool              mHasCollapse;
+  bool mHasCollapse;
     /**true if a untied clause was present, even if the task was changed to tied
        during instrumentation.*/
-    bool                      mHasUntied;
+  bool mHasUntied;
     /** schedule type in the schedule clause*/
-    POMP2_Schedule_type       mScheduleType;
+  POMP2_Schedule_type mScheduleType;
     /** defaultSharing type in the defaultSharing clause*/
-    POMP2_DefaultSharing_type mDefaultSharingType;
+  POMP2_DefaultSharing_type mDefaultSharingType;
     /** user group name*/
-    char*                     mUserGroupName;
+  char *mUserGroupName;
     /** number of sections*/
-    unsigned                  mNumSections;
+  unsigned mNumSections;
     /** name of a named critical region*/
-    char*                     mCriticalName;
-    //@}
+  char *mCriticalName;
+  //@}
 } POMP2_Region_info;
 
 /** CTC Tokens */
@@ -263,15 +256,14 @@ typedef struct
  *
  */
 void
-ctcString2RegionInfo( const char         ctcString[],
-                      POMP2_Region_info* regionInfo );
+ctcString2RegionInfo(const char ctcString[],
+		     POMP2_Region_info * regionInfo);
 
 /**
  * Free the memory of the regionInfo members.
  * @param regionInfo The regioninfo to be freed.
  */
-void
-freePOMP2RegionInfoMembers( POMP2_Region_info* regionInfo );
+void freePOMP2RegionInfoMembers(POMP2_Region_info * regionInfo);
 
 
-#endif /* POMP2_REGION_INFO_H */
+#endif				/* POMP2_REGION_INFO_H */

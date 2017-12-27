@@ -12,24 +12,24 @@
 #define ACTIVE 1
 
 typedef struct hEntry {
-  long * data;
+  long *data;
   int flags;
   unsigned long key;
 } hEntry;
 
-typedef struct s_hashmap{
-  hEntry* table;
+typedef struct s_hashmap {
+  hEntry *table;
   long size, count;
 } s_hashmap;
 
-s_hashmap * hashmapCreate(int startsize);
+s_hashmap *hashmapCreate(int startsize);
 
-void hashmapInsert(s_hashmap* hash, long * data, unsigned long key);
+void hashmapInsert(s_hashmap * hash, long *data, unsigned long key);
 
-long* hashmapRemove(s_hashmap* hash, unsigned long key);
+long *hashmapRemove(s_hashmap * hash, unsigned long key);
 
-long * hashmapGet(s_hashmap* hash, unsigned long key);
+long *hashmapGet(s_hashmap * hash, unsigned long key);
 
-long hashmapCount(s_hashmap* hash);
+long hashmapCount(s_hashmap * hash);
 
-void hashmapDelete(s_hashmap* hash);
+void hashmapDelete(s_hashmap * hash);

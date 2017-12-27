@@ -9,47 +9,47 @@
 #ifndef NINA_H
 #define NINA_H
 
-  #include <stdlib.h>
-  #include <stdio.h>
-  #include <stdbool.h>
-  #include <string.h>
-  #include <cpufreq.h>
-  #include <time.h>
-  #include <stdbool.h>
-  #include "hashmap.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+#include <cpufreq.h>
+#include <time.h>
+#include <stdbool.h>
+#include "hashmap.h"
 
-  #define BUFFER_SIZE 1024
-  #define BUFFER_LINE 200
-  #define INIT_HASH_SIZE 256
+#define BUFFER_SIZE 1024
+#define BUFFER_LINE 200
+#define INIT_HASH_SIZE 256
 
-  typedef struct ParallelRegionsFile {
-    char                         *name;
-    s_hashmap                    *hash;
-    struct ParallelRegionsFile   *next;
-  } ParallelRegionsFile;
+typedef struct ParallelRegionsFile {
+  char *name;
+  s_hashmap *hash;
+  struct ParallelRegionsFile *next;
+} ParallelRegionsFile;
 
-  void insertInList(char * name, int hashSize);
+void insertInList(char *name, int hashSize);
 
-  ParallelRegionsFile * deleteFirst();
+ParallelRegionsFile *deleteFirst();
 
-  int isListEmpty();
+int isListEmpty();
 
-  ParallelRegionsFile * find(char * name);
+ParallelRegionsFile *find(char *name);
 
-  void freeMemoryData();
+void freeMemoryData();
 
-  void printList();
+void printList();
 
-  int getFileSize(char *filePath);
+int getFileSize(char *filePath);
 
-  int randomNumberBetweenMinMax(int min, int max);
+int randomNumberBetweenMinMax(int min, int max);
 
-  void initLibrary();
+void initLibrary();
 
-  void changeProcessorsFrequency(long freq);
+void changeProcessorsFrequency(long freq);
 
-  void callByNINALibrary(char *file, long start_line);
+void callByNINALibrary(char *file, long start_line);
 
-  void changeProcessorsFrequencyToMax();
+void changeProcessorsFrequencyToMax();
 
-#endif // NINA_H
+#endif				// NINA_H

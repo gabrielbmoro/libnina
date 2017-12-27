@@ -45,9 +45,7 @@
 /**
  *  @brief This struct stores all information on OPARI2 regions
  */
-typedef struct
-{
-    OPARI2_REGION_INFO
-} OPARI2_Region_info;
+typedef struct {
+OPARI2_REGION_INFO} OPARI2_Region_info;
 
-#endif /* OPARI2_REGION_INFO_H */
+#endif				/* OPARI2_REGION_INFO_H */

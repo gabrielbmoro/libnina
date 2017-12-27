@@ -40,17 +40,15 @@
  * POMP2_USER_Region_type
  *
  */
-typedef enum
-{
-    POMP2_USER_no_type = 0,
-    POMP2_USER_Region
+typedef enum {
+  POMP2_USER_no_type = 0,
+  POMP2_USER_Region
 } POMP2_USER_Region_type;
 
 /** converts regionType into a string
  * @param regionType The regionType to be converted.
  * @return string representation of the region type*/
-const char*
-pomp2UserRegionType2String( POMP2_USER_Region_type regionType );
+const char *pomp2UserRegionType2String(POMP2_USER_Region_type regionType);
 
 /**
  *  @brief This struct stores all information on a user defined
@@ -58,24 +56,23 @@ pomp2UserRegionType2String( POMP2_USER_Region_type regionType );
  *  ctcString2UserRegionInfo() can be used to fill this struct with data
  *  from a ctcString.
  */
-typedef struct
-{
+typedef struct {
     /** @name Generic source code information attributes
      */
-    /*@{*/
+  /*@{ */
     /** source location info. Needs to be first for the typecasting
         from generic OPARI2_Region_info to work. */
-    OPARI2_REGION_INFO
+  OPARI2_REGION_INFO
     /** @name Type of the OpenMP region*/
-    POMP2_USER_Region_type mRegionType;
-    /*@}*/
+  POMP2_USER_Region_type mRegionType;
+  /*@} */
 
     /** @name Attributes for user region types
      */
-    /*@{*/
+  /*@{ */
     /** name of a user defined region*/
-    char* mUserRegionName;
-    /*@}*/
+  char *mUserRegionName;
+  /*@} */
 } POMP2_USER_Region_info;
 
 /** CTC Tokens */
@@ -121,15 +118,14 @@ typedef struct
  *
  */
 void
-ctcString2UserRegionInfo( const char              ctcString[],
-                          POMP2_USER_Region_info* regionInfo );
+ctcString2UserRegionInfo(const char ctcString[],
+			 POMP2_USER_Region_info * regionInfo);
 
 /**
  * Free the memory of the regionInfo members.
  * @param regionInfo The regioninfo to be freed.
  */
-void
-freePOMP2UserRegionInfoMembers( POMP2_USER_Region_info* regionInfo );
+void freePOMP2UserRegionInfoMembers(POMP2_USER_Region_info * regionInfo);
 
 
-#endif /* POMP2_USER_REGION_INFO_H */
+#endif				/* POMP2_USER_REGION_INFO_H */

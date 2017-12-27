@@ -11,17 +11,15 @@ static unsigned long isPrime(unsigned long val)
 {
   int i, p, exp, a;
 
-  for (i = 9; i--;)
-  {
-    a = (rand() % (val-4)) + 2;
+  for (i = 9; i--;) {
+    a = (rand() % (val - 4)) + 2;
     p = 1;
-    exp = val-1;
-    while (exp)
-    {
+    exp = val - 1;
+    while (exp) {
       if (exp & 1)
-        p = (p*a)%val;
+	p = (p * a) % val;
 
-      a = (a*a)%val;
+      a = (a * a) % val;
       exp >>= 1;
     }
 
@@ -35,76 +33,71 @@ static unsigned long isPrime(unsigned long val)
 static int findPrimeGreaterThan(int val)
 {
   if (val & 1)
-    val+=2;
+    val += 2;
   else
     val++;
 
   while (!isPrime(val))
-    val+=2;
+    val += 2;
 
   return val;
 }
 
-static void rehash(s_hashmap* hm)
+static void rehash(s_hashmap * hm)
 {
   long size = hm->size;
-  hEntry* table = hm->table;
+  hEntry *table = hm->table;
 
-  hm->size = findPrimeGreaterThan(size<<1);
-  hm->table = (hEntry*)calloc(sizeof(hEntry), hm->size);
+  hm->size = findPrimeGreaterThan(size << 1);
+  hm->table = (hEntry *) calloc(sizeof(hEntry), hm->size);
   hm->count = 0;
 
-  while(--size >= 0)
+  while (--size >= 0)
     if (table[size].flags == ACTIVE)
       hashmapInsert(hm, table[size].data, table[size].key);
 
   free(table);
 }
 
-s_hashmap * hashmapCreate(int startsize) {
+s_hashmap *hashmapCreate(int startsize)
+{
 
-  s_hashmap* hm = (s_hashmap*)malloc(sizeof(s_hashmap));
+  s_hashmap *hm = (s_hashmap *) malloc(sizeof(s_hashmap));
 
   if (!startsize)
     startsize = TABLE_STARTSIZE;
   else
-    startsize = findPrimeGreaterThan(startsize-2);
+    startsize = findPrimeGreaterThan(startsize - 2);
 
-  hm->table = (hEntry*)calloc(sizeof(hEntry), startsize);
+  hm->table = (hEntry *) calloc(sizeof(hEntry), startsize);
   hm->size = startsize;
   hm->count = 0;
   return hm;
 }
 
-void hashmapInsert(s_hashmap* hash, long* data, unsigned long key)
+void hashmapInsert(s_hashmap * hash, long *data, unsigned long key)
 {
   long index, i, step;
 
   if (hash->size <= hash->count)
     rehash(hash);
 
-  do
-  {
+  do {
     index = key % hash->size;
-    step = (key % (hash->size-2)) + 1;
+    step = (key % (hash->size - 2)) + 1;
 
-    for (i = 0; i < hash->size; i++)
-    {
-      if (hash->table[index].flags & ACTIVE)
-      {
-        if (hash->table[index].key == key)
-        {
-          hash->table[index].data = (long*)data;
-          return;
-        }
-      }
-      else
-      {
-        hash->table[index].flags |= ACTIVE;
-        hash->table[index].data = (long*)data;
-        hash->table[index].key = key;
-        ++hash->count;
-        return;
+    for (i = 0; i < hash->size; i++) {
+      if (hash->table[index].flags & ACTIVE) {
+	if (hash->table[index].key == key) {
+	  hash->table[index].data = (long *) data;
+	  return;
+	}
+      } else {
+	hash->table[index].flags |= ACTIVE;
+	hash->table[index].data = (long *) data;
+	hash->table[index].key = key;
+	++hash->count;
+	return;
       }
 
       index = (index + step) % hash->size;
@@ -117,30 +110,24 @@ void hashmapInsert(s_hashmap* hash, long* data, unsigned long key)
   while (1);
 }
 
-long* hashmapRemove(s_hashmap* hash, unsigned long key)
+long *hashmapRemove(s_hashmap * hash, unsigned long key)
 {
   long index, i, step;
 
   index = key % hash->size;
-  step = (key % (hash->size-2)) + 1;
+  step = (key % (hash->size - 2)) + 1;
 
-  for (i = 0; i < hash->size; i++)
-  {
-    if (hash->table[index].data)
-    {
-      if (hash->table[index].key == key)
-      {
-        if (hash->table[index].flags & ACTIVE)
-        {
-          hash->table[index].flags &= ~ACTIVE;
-          --hash->count;
-          return hash->table[index].data;
-        }
-        else /* in, but not active (i.e. deleted) */
-          return 0;
+  for (i = 0; i < hash->size; i++) {
+    if (hash->table[index].data) {
+      if (hash->table[index].key == key) {
+	if (hash->table[index].flags & ACTIVE) {
+	  hash->table[index].flags &= ~ACTIVE;
+	  --hash->count;
+	  return hash->table[index].data;
+	} else			/* in, but not active (i.e. deleted) */
+	  return 0;
       }
-    }
-    else /* found an empty place (can't be in) */
+    } else			/* found an empty place (can't be in) */
       return 0;
 
     index = (index + step) % hash->size;
@@ -149,25 +136,20 @@ long* hashmapRemove(s_hashmap* hash, unsigned long key)
   return 0;
 }
 
-long* hashmapGet(s_hashmap* hash, unsigned long key)
+long *hashmapGet(s_hashmap * hash, unsigned long key)
 {
-  if (hash->count)
-  {
+  if (hash->count) {
     long index, i, step;
     index = key % hash->size;
-    step = (key % (hash->size-2)) + 1;
+    step = (key % (hash->size - 2)) + 1;
 
-    for (i = 0; i < hash->size; i++)
-    {
-      if (hash->table[index].key == key)
-      {
-        if (hash->table[index].flags & ACTIVE)
-          return hash->table[index].data;
-        break;
-      }
-      else
-        if (!hash->table[index].data)
-          break;
+    for (i = 0; i < hash->size; i++) {
+      if (hash->table[index].key == key) {
+	if (hash->table[index].flags & ACTIVE)
+	  return hash->table[index].data;
+	break;
+      } else if (!hash->table[index].data)
+	break;
 
       index = (index + step) % hash->size;
     }
@@ -176,12 +158,12 @@ long* hashmapGet(s_hashmap* hash, unsigned long key)
   return 0;
 }
 
-long hashmapCount(s_hashmap* hash)
+long hashmapCount(s_hashmap * hash)
 {
   return hash->count;
 }
 
-void hashmapDelete(s_hashmap* hash)
+void hashmapDelete(s_hashmap * hash)
 {
   free(hash->table);
   free(hash);

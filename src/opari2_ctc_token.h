@@ -26,12 +26,11 @@
 #include "pomp2_user_region_info.h"
 
 /** CTC Tokens */
-typedef enum
-{
-    CTC_No_token = 0,
-    CTC_REGION_TOKENS,
-    CTC_OMP_TOKENS,
-    CTC_USER_REGION_TOKENS
+typedef enum {
+  CTC_No_token = 0,
+  CTC_REGION_TOKENS,
+  CTC_OMP_TOKENS,
+  CTC_USER_REGION_TOKENS
 } CTCToken;
 
-#endif /* OPARI2_CTC_TOKEN_H */
+#endif				/* OPARI2_CTC_TOKEN_H */
