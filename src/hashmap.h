@@ -22,12 +22,6 @@ typedef struct s_hashmap{
   long size, count;
 } s_hashmap;
 
-static unsigned long isPrime(unsigned long val);
-
-static int findPrimeGreaterThan(int val);
-
-static void rehash(s_hashmap* hm);
-
 s_hashmap * hashmapCreate(int startsize);
 
 void hashmapInsert(s_hashmap* hash, long * data, unsigned long key);
