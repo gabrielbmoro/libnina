@@ -278,7 +278,6 @@ cpufreq-info -g
 #+RESULTS:
 : performance powersave
 
-
 * Experiment: =teste_2=
 
 - Plataform used =hype2=:
