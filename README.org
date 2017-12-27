@@ -1,5 +1,5 @@
-#+AUTHOR: Gabriel Bronzatti Moro e Lucas M. Schnorr
-#+TITLE: README
+#+AUTHOR: Gabriel Bronzatti Moro and Lucas M. Schnorr
+#+TITLE: What is the libnina?
 #+LATEX_HEADER: \usepackage[margin=2cm,a4paper]{geometry}
 #+STARTUP: overview indent
 #+TAGS: Gabriel(G) Lucas(L) noexport(n) deprecated(d)
@@ -9,19 +9,16 @@
 #+mode: org
 #+coding: utf-8
 
-* What is the libnina?
-
-- Libnina is a library used to reduce the energy consumption of OpenMP
-  parallel applications. The libnina uses two steps, the first step is
-  necessary to generate a configuration file that will describe the
-  target application's behavior. In the second step, the target
-  application will be executed using pomp2 library with libnina,
-  libnina will use the configuration file to reduce the energy
-  consumption using cpufreq calls to change the CPU frequency
-  according to a configuration file.
+Libnina is a library used to reduce the energy consumption of OpenMP
+parallel applications. The libnina methodology uses two steps, the
+first one is necessary to generate a configuration file that will
+describe the target application's behavior. In the second step, the
+target application will be executed using pomp2 library with
+libnina. The library uses the configuration file to reduce the energy
+consumption using cpufreq calls to change the CPU frequency according
+to the provided configuration file.
   
-** Example of use
-*** Experiment: =teste_1=
+* Experiment: =teste_1=
 
 - Plataform used:
 
@@ -50,7 +47,7 @@ ls
 #+RESULTS:
 : strassen.c
 
-**** Step 1
+** Step 1
 
 - We need know about application's behavior, before of use it with
   libnina. We use Scorep, this tool may be installed using our script
@@ -104,7 +101,7 @@ sudo -E ./strassen_with_scorep 2800
 
 - Now, it's necessary for you install more two dependencies:
 
-***** Otf22csv provided by Akypuera
+*** Otf22csv provided by Akypuera
 
 - This tool used must be installed using the follow script:
 
@@ -115,7 +112,7 @@ ls scripts/ | grep -i aky
 #+RESULTS:
 : akypuera_installation.sh
 
-***** R libraries
+*** R libraries
 
 - The R libraries must be installed using the follow script:
 
@@ -126,7 +123,7 @@ ls $HOME/svn/libnina/scripts/ | grep -i r_libra
 #+RESULTS:
 : r_libraries_installation.sh
 
-***** Experiment
+*** Experiment
 
 - The configuration file used by libnina will be generated now, using
   the follow script:
@@ -219,7 +216,7 @@ cat $HOME/svn/libnina/teste_1/expData/ninaFileInput.csv
 - This is a final format to libnina executed strassen program changing
   the frequency according to its regions.
 
-**** Step 2
+** Step 2
 
 - Now, we go to compile the libnina:
 
@@ -281,7 +278,8 @@ cpufreq-info -g
 #+RESULTS:
 : performance powersave
 
-*** Experiment: =teste_2=
+
+* Experiment: =teste_2=
 
 - Plataform used =hype2=:
 
@@ -317,7 +315,7 @@ cpufreq-info -g
   libnina. Now, we're gonna replicate the same experiment, but we're
   using the libnina with userspace governor on =hype2= platform. 
   
-**** Step1
+** Step1
 
 - This step1 will use the same methodology of the =teste_1=.
 
@@ -391,7 +389,7 @@ strassen.mod.c
   the strassen application with libnina, you need to use the
   executable called =strassen_c_inst=.
 
-**** Step2
+** Step2
 
 - This step will be executed the strassen application, we evaluate the
   use of the libnina. The input size used will be 8148, because that
