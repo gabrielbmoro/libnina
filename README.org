@@ -19,7 +19,7 @@ consumption using cpufreq calls to change the CPU frequency according
 to the provided configuration file.
   
 * Experiment: =teste_1=
-
+** Introduction
 - Plataform used:
 
 #+begin_src sh :results output :exports both
@@ -279,7 +279,7 @@ cpufreq-info -g
 : performance powersave
 
 * Experiment: =teste_2=
-
+** Introduction
 - Plataform used =hype2=:
 
 #+begin_src sh :results output :exports both
