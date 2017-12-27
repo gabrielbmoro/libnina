@@ -360,7 +360,6 @@ assignDefaultSharingType( CTCData*       obj,
 static void
 checkOMPConsistency( CTCData* obj )
 {
-    bool               requiredAttributesFound;
     POMP2_Region_info* regionInfo = ( POMP2_Region_info* )obj->mRegionInfo;
 
     OPARI2_CTC_checkConsistency( obj );

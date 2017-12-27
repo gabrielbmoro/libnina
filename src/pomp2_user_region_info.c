@@ -145,7 +145,6 @@ pomp2UserRegionType2String( POMP2_USER_Region_type regionType )
 static void
 checkUSERConsistency( CTCData* obj )
 {
-    bool                    requiredAttributesFound;
     POMP2_USER_Region_info* regionInfo = ( POMP2_USER_Region_info* )obj->mRegionInfo;
 
     OPARI2_CTC_checkConsistency( obj );
