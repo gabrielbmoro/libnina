@@ -222,7 +222,7 @@ void initLibrary()
     printf
 	("libnina->initLibrary: It is necessary to define the environment variables NINA_CONFIG, NINA_MAX_FREQUENCY, NINA_AMOUNT_OF_CPUS, and NINA_TARGET_CPUS... \n");
 
-    exit(0);
+    exit(1);
 
   } else {
 
