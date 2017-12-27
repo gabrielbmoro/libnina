@@ -74,7 +74,7 @@ ParallelRegionsFile * find(char * name) {
 
 void freeMemoryData() {
 
-	if(isListEmpty){
+	if(isListEmpty()){
 		return;
 	}
 
