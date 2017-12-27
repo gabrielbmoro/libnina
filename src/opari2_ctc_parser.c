@@ -471,7 +471,7 @@ OPARI2_CTC_string2Enum( const OPARI2_CTCMapType* map,
                         const size_t             n_elements,
                         const char*              string )
 {
-    int i;
+    unsigned int i;
     for ( i = 0; i < n_elements; ++i )
     {
         if ( strcmp( map[ i ].mString, string ) == 0 )
@@ -489,7 +489,7 @@ OPARI2_CTC_enum2String( const OPARI2_CTCMapType* map,
                         const size_t             n_elements,
                         int                      e_in )
 {
-    int i;
+    unsigned int i;
     for ( i = 0; i < n_elements; ++i )
     {
         if ( e_in == map[ i ].mEnum )
