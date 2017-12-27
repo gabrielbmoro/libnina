@@ -4,7 +4,7 @@ CFLAGS = -I/$SCOREP_PATH/include/ -I.
 LDFLAGS = -L$SCOREP_PATH/lib/
 
 CC = gcc # C compiler
-CFLAGS += -fPIC -Wall -Wextra -O2 -g -fopenmp # C flags
+CFLAGS += -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O2 -g -fopenmp # C flags
 LDFLAGS += -shared -lcpufreq  # linking flags
 RM = rm -f  # rm command
 TARGET_LIB = libnina.so # target lib
