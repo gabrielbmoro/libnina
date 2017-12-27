@@ -14,7 +14,7 @@
 typedef struct hEntry {
   long * data;
   int flags;
-  long key;
+  unsigned long key;
 } hEntry;
 
 typedef struct s_hashmap{
