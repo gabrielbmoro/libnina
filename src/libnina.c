@@ -28,7 +28,7 @@ void insertInList(char *name, int hashSize)
   head = new;
 
   if (isItTheLogServiceEnabled)
-    printf("libnina->insertInList: %s\n", name);
+    printf("libnina->insertInList: %s (%d)\n", name, hashSize);
 
 }
 
