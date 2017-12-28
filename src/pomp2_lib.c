@@ -635,10 +635,10 @@ POMP2_Parallel_begin( POMP2_Region_handle* pomp2_handle)
     }
     if ( pomp2_tracing )
     {
-
       my_pomp2_region *r = (my_pomp2_region*)*pomp2_handle;
       fprintf( stderr, "%3d: begin parallel %s:%d-%d\n", omp_get_thread_num(), r->start_file_name, r->start_line_1, r->end_line_1 );
     }
+
     /*-> My code */
     my_pomp2_region* region = *pomp2_handle;
     callByNINALibrary(region->start_file_name, region->start_line_1);
@@ -657,11 +657,11 @@ POMP2_Parallel_end( POMP2_Region_handle* pomp2_handle )
     {
       my_pomp2_region *r = (my_pomp2_region*)*pomp2_handle;
       fprintf( stderr, "%3d: end parallel %s:%d-%d\n", omp_get_thread_num(), r->start_file_name, r->start_line_1, r->end_line_1 );
-
-        /*-> My code */
-        changeProcessorsFrequencyToMax();
-       /*My code <-*/
     }
+
+    /*-> My code */
+    changeProcessorsFrequencyToMax();
+    /*My code <-*/
 }
 
 void
