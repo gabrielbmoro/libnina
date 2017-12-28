@@ -212,7 +212,6 @@ void changeProcessorsFrequencyToMax()
 
 void initLibrary()
 {
-  POMP2_Off();
   if ((getenv("NINA_CONFIG") == NULL)
       || (getenv("NINA_MAX_FREQUENCY") == NULL)
       || (getenv("NINA_TARGET_CPUS") == NULL)
@@ -229,7 +228,11 @@ void initLibrary()
     maxFrequency = atol(getenv("NINA_MAX_FREQUENCY"));
     amountOfCpus = atoi(getenv("NINA_AMOUNT_OF_CPUS"));
     isItTheLogServiceEnabled = (getenv("NINA_LOG") != NULL);
-
+    if (isItTheLogServiceEnabled){
+      POMP2_On();
+    }else{
+      POMP2_Off();
+    }
     char *str = malloc(sizeof(char) * 40);
     str = getenv("NINA_TARGET_CPUS");
     targetCPUS = convertStringToIntegerArray(str);
