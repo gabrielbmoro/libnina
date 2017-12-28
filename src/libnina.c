@@ -72,7 +72,7 @@ ParallelRegionsFile *find(char *name)
   }
 
   if (isItTheLogServiceEnabled)
-    printf("libnina->find: %s\n", name);
+    printf("libnina->find: %s found %p\n", name, current);
 
   return current;
 }
