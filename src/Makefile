@@ -1,7 +1,7 @@
 # Makefile template for shared library
 
-CFLAGS = -I/$SCOREP_PATH/include/ -I.
-LDFLAGS = -L$SCOREP_PATH/lib/
+CFLAGS =
+LDFLAGS =
 
 CC = gcc # C compiler
 CFLAGS += -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O2 -g -fopenmp # C flags
