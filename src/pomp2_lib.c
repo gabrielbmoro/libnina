@@ -244,7 +244,9 @@ POMP2_Finalize(void)
     if ( !pomp2_finalize_called )
     {
         pomp2_finalize_called = 1;
-        fprintf( stderr, "  0: finalize\n" );
+	if (pomp2_tracing) {
+	  fprintf( stderr, "  0: finalize\n" );
+	}
     }
 
     /*My code*/
@@ -262,7 +264,9 @@ POMP2_Init(void)
         pomp2_init_called = 1;
 
         atexit( POMP2_Finalize );
-        fprintf( stderr, "  0: init\n" );
+	if (pomp2_tracing) {
+	  fprintf( stderr, "  0: init\n" );
+	}
 
         /*-> My code */
         initLibrary();
