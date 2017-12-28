@@ -257,21 +257,20 @@ POMP2_Finalize(void)
 void
 POMP2_Init(void)
 {
-    static int pomp2_init_called = 0;
+  /*-> LibNINA */
+  initLibrary();
+  changeProcessorsFrequencyToMax();
+  /*My code <-*/
+ 
+  static int pomp2_init_called = 0;
 
-    if ( !pomp2_init_called )
-    {
+  if ( !pomp2_init_called ) {
         pomp2_init_called = 1;
 
         atexit( POMP2_Finalize );
 	if (pomp2_tracing) {
 	  fprintf( stderr, "  0: init\n" );
 	}
-
-        /*-> My code */
-        initLibrary();
-        changeProcessorsFrequencyToMax();
-        /*My code <-*/
 
         int n_pomp2_regions = POMP2_Get_num_regions() + POMP2_USER_Get_num_regions();
         int n_pomp2_user_regions = POMP2_USER_Get_num_regions();
@@ -289,8 +288,6 @@ POMP2_Init(void)
             POMP2_USER_Init_regions();
           }
 
-
-        pomp2_tracing = 1;
     }
 }
 
