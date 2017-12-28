@@ -63,7 +63,8 @@ ParallelRegionsFile *find(char *name)
   while (strcmp(current->name, name) < 0) {
 
     if (current->next == NULL) {
-      return NULL;
+      current = NULL;
+      break;
     } else {
       current = current->next;
     }
