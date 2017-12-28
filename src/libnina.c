@@ -181,13 +181,9 @@ void callByNINALibrary(char *file, long start_line)
 
 int *convertStringToIntegerArray(char *str)
 {
-
   char **res = NULL;
-
   char *p = strtok(str, ",");
-
   int n_spaces = 0, i;
-
   while (p) {
     res = realloc(res, sizeof(char *) * ++n_spaces);
     if (res == NULL)
@@ -197,12 +193,10 @@ int *convertStringToIntegerArray(char *str)
   }
   res = realloc(res, sizeof(char *) * (n_spaces + 1));
   res[n_spaces] = 0;
-
   int *numbers = malloc(sizeof(int) * n_spaces);
-
-  for (i = 0; i < n_spaces; ++i)
+  for (i = 0; i < n_spaces; ++i){
     numbers[i] = atoi(res[i]);
-
+  }
   free(res);
   return numbers;
 }
@@ -225,21 +219,17 @@ void initLibrary()
     exit(1);
 
   } else {
-
     maxFrequency = atol(getenv("NINA_MAX_FREQUENCY"));
-
     amountOfCpus = atoi(getenv("NINA_AMOUNT_OF_CPUS"));
-
     isItTheLogServiceEnabled = (getenv("NINA_LOG") != NULL);
 
     char *str = malloc(sizeof(char) * 40);
-
     str = getenv("NINA_TARGET_CPUS");
-
     targetCPUS = convertStringToIntegerArray(str);
 
-    if (targetCPUS == NULL)
+    if (targetCPUS == NULL){
       exit(0);
+    }
 
     FILE *arq;
 
