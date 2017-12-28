@@ -174,6 +174,9 @@ void callByNINALibrary(char *file, long start_line)
 
   if (tmp != NULL) {
     long newFrequency = hashmapGet(tmp->hash, start_line);
+    if (isItTheLogServiceEnabled){
+      printf("libnina->callByNINALibrary: change %d line to %d\n", start_line, newFrequency);
+    }
     changeProcessorsFrequency(newFrequency);
   }
 
