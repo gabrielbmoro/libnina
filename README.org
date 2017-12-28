@@ -17,6 +17,27 @@ target application will be executed using pomp2 library with
 libnina. The library uses the configuration file to reduce the energy
 consumption using cpufreq calls to change the CPU frequency according
 to the provided configuration file.
+
+* Requirements
+
+Libnina requires the =acpi-cpufreq= driver (instead of the =intel_pstate=)
+because it dynamically changes the CPU frequency during runtime. The
+governor must be the =userspace= that let's application-level calls
+(with the appropriate permissions) to set the CPU frequency.  If you
+are using Grub, you can disable =intel_pstate= by adding the following
+line in the =/etc/default/grub= file.
+
+#+BEGIN_EXAMPLE
+GRUB_CMDLINE_LINUX_DEFAULT="intel_pstate=disable"
+#+END_EXAMPLE
+
+And then update =grub.cfg= by issuing the following command:
+
+#+BEGIN_EXAMPLE
+grub-mkconfig -o /boot/grub/grub.cfg
+#+END_EXAMPLE
+
+- [[https://unix.stackexchange.com/questions/121410/setting-cpu-governor-to-on-demand-or-conservative][Check here for further details about disabling =intel_pstate=]].
   
 * Experiment: =teste_1=
 ** Introduction
