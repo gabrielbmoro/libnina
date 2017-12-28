@@ -280,23 +280,16 @@ ldd strassen_c_inst
 
 #+begin_src sh :results output :exports both
 cd teste_1/src/
-
-export NINA_MAX_FREQUENCY=2300000
-export NINA_AMOUNT_OF_CPUS=40
-export NINA_LOG="something"
-export NINA_CONFIG=/home/gbmoro/svn/libnina/teste_1/expData/ninaFileInput.csv
-
-sudo -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gbmoro/svn/libnina/src/ ./strassen_c_inst
-
+export NINA_MAX_FREQUENCY=2800000
+export NINA_AMOUNT_OF_CPUS=4
+export NINA_TARGET_CPUS=0,1,2,3
+export NINA_LOG=true
+export NINA_CONFIG=../expData/ninaFileInput.csv
+export LIBNINA_PATH=../../src/
+sudo -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${LIBNINA_PATH} ./strassen_c_inst
 #+end_src
 
 #+RESULTS:
-#+begin_example
-  0: init
-11.11.2017.19h35m10s: ->NINA_maxFrequencyOfProcessor: The frequency will be set to max
-11.11.2017.19h35m10s -> NINA_CHANGEFREQ: it is impossible to change the CPU frequency. It's necessary the userspace governor...
-  0: finalize
-#+end_example
 
 - I used this platform to show that it isn't possible to run libnina
   in plataform without userspace governors. This PC only has the
