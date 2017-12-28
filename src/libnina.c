@@ -224,6 +224,8 @@ void initLibrary()
     exit(1);
 
   } else {
+    printf("libnina->initLibrary: starting...\n");
+
     maxFrequency = atol(getenv("NINA_MAX_FREQUENCY"));
     amountOfCpus = atoi(getenv("NINA_AMOUNT_OF_CPUS"));
     isItTheLogServiceEnabled = (getenv("NINA_LOG") != NULL);
@@ -281,6 +283,6 @@ void initLibrary()
     free(fileNameTmp);
 
     fclose(arq);
-
+    printf("libnina->initLibrary: finished.\n");
   }
 }
