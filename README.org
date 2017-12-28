@@ -248,23 +248,33 @@ LD_LIBRARY_PATH=/home/gbmoro/svn/libnina/src:$LD_LIBRARY_PATH
 #+end_src
 
 #+RESULTS:
+: make: Nothing to be done for 'all'.
 
 - Using libnina in strassen compilation:
 
-#+begin_src sh :session f :results output :exports both 
+#+begin_src shell :results output
+export OPARI2_PATH=$HOME/install/scorep-3.1/
+export PATH=$PATH:$OPARI2_PATH/bin/
+export LIBNINA_PATH=../../src/
 cd teste_1/src/
-/opt/opari2/bin/opari2 strassen.c
-gcc -fopenmp -g -O2 -I/opt/opari2/include -c strassen.mod.c -o strassen_c.mod.o
-`/opt/opari2/bin/opari2-config --nm` strassen_c.mod.o | `/opt/opari2/bin/opari2-config --region-initialization` > pompregions_c.c
-gcc  -I/opt/opari2/include -c pompregions_c.c -o pompregions_c.o
-gcc -fopenmp -g -O2 strassen_c.mod.o pompregions_c.o -L/home/gbmoro/svn/libnina/src -lnina -lcpufreq -o strassen_c_inst
-ls
+opari2 strassen.c
+gcc -fopenmp -g -O2 -I${OPARI2_PATH}/include -c strassen.mod.c -o strassen_c.mod.o
+$(opari2-config --nm) strassen_c.mod.o | $(opari2-config --region-initialization) > pompregions_c.c
+gcc  -I${OPARI2_PATH}/include -c pompregions_c.c -o pompregions_c.o
+gcc -fopenmp -g -O2 strassen_c.mod.o pompregions_c.o -L${LIBNINA_PATH} -o strassen_c_inst -lnina -lcpufreq
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${LIBNINA_PATH}
+ldd strassen_c_inst
 #+end_src
 
 #+RESULTS:
-: 
-:  pompregions_c.c  strassen.c	  strassen_c.mod.o	strassen.mod.c
-: pompregions_c.o  strassen_c_inst  strassen.c.opari.inc
+: 	linux-vdso.so.1 (0x00007ffcac575000)
+: 	libnina.so => ../../src/libnina.so (0x00007fc96c0ca000)
+: 	libcpufreq.so.0 => /usr/lib/libcpufreq.so.0 (0x00007fc96bec4000)
+: 	libgomp.so.1 => /usr/lib/x86_64-linux-gnu/libgomp.so.1 (0x00007fc96bc95000)
+: 	libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fc96ba77000)
+: 	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fc96b6d4000)
+: 	/lib64/ld-linux-x86-64.so.2 (0x00007fc96c4d8000)
+: 	libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fc96b4d0000)
 
 - Running
 
