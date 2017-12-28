@@ -211,6 +211,7 @@ void changeProcessorsFrequencyToMax()
 
 void initLibrary()
 {
+  POMP2_Off();
   if ((getenv("NINA_CONFIG") == NULL)
       || (getenv("NINA_MAX_FREQUENCY") == NULL)
       || (getenv("NINA_TARGET_CPUS") == NULL)
