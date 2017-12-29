@@ -248,10 +248,6 @@ POMP2_Finalize(void)
 	  fprintf( stderr, "  0: finalize\n" );
 	}
     }
-
-    /*My code*/
-    freeMemoryData();
-    /*My code*/
 }
 
 void

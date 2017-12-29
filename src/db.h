@@ -20,4 +20,5 @@ void LIBNINA_RegionsFree (void);
 void LIBNINA_LoadRegionsFile (void);
 long LIBNINA_GetFrequency (char *source_filename, int start_line);
 
+#include "libnina.h"
 #endif
