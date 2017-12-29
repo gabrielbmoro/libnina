@@ -10,7 +10,7 @@
 #include "libnina.h"
 
 ParallelRegionsFile *head = NULL;
-bool isItTheLogServiceEnabled = false;
+bool logEnabled = false;
 int amountOfCpus = 0;
 long maxFrequency = 1200000;
 int *targetCPUS = NULL;
@@ -27,7 +27,7 @@ void insertInList(char *name, int hashSize)
   new->next = head;
   head = new;
 
-  if (isItTheLogServiceEnabled)
+  if (logEnabled)
     printf("libnina->insertInList: %s (%d)\n", name, hashSize);
 
 }
@@ -38,7 +38,7 @@ ParallelRegionsFile *deleteFirst()
   ParallelRegionsFile *tmpNode = head;
   head = head->next;
 
-  if (isItTheLogServiceEnabled)
+  if (logEnabled)
     printf("libnina->deleteFirst\n");
 
   return tmpNode;
@@ -71,7 +71,7 @@ ParallelRegionsFile *find(char *name)
 
   }
 
-  if (isItTheLogServiceEnabled){
+  if (logEnabled){
     printf("libnina->find: %s found %p\n", name, current);
   }
 
@@ -97,7 +97,7 @@ void freeMemoryData()
   if (targetCPUS != NULL)
     free(targetCPUS);
 
-  if (isItTheLogServiceEnabled)
+  if (logEnabled)
     printf("libnina->freeMemoryData\n");
 
 }
@@ -152,7 +152,7 @@ void changeProcessorsFrequency(long freq)
 
   for (count = 0; count < amountOfCpus; count++) {
     cpufreqReturned = cpufreq_set_frequency(targetCPUS[count], freq);
-    if (isItTheLogServiceEnabled)
+    if (logEnabled)
       printf("libnina->changeFreq: returned is %d of processor %d\n",
 	     cpufreqReturned, targetCPUS[count]);
   }
@@ -170,13 +170,13 @@ void callByNINALibrary(char *file, long start_line)
 
   ParallelRegionsFile *tmp = find(file);
 
-  if (isItTheLogServiceEnabled)
     printf("libnina->callByNINALibrary: file %s at %ld\n", file,
 	   start_line);
+  if (logEnabled)
 
   if (tmp != NULL) {
     long newFrequency = hashmapGet(tmp->hash, start_line);
-    if (isItTheLogServiceEnabled){
+    if (logEnabled){
       printf("libnina->callByNINALibrary: change %d line to %d\n", start_line, newFrequency);
     }
     changeProcessorsFrequency(newFrequency);
@@ -228,8 +228,8 @@ void initLibrary()
 
     maxFrequency = atol(getenv("NINA_MAX_FREQUENCY"));
     amountOfCpus = atoi(getenv("NINA_AMOUNT_OF_CPUS"));
-    isItTheLogServiceEnabled = (getenv("NINA_LOG") != NULL);
-    if (isItTheLogServiceEnabled){
+    logEnabled = (getenv("NINA_LOG") != NULL);
+    if (logEnabled){
       POMP2_On();
     }else{
       POMP2_Off();
