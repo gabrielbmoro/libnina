@@ -76,7 +76,7 @@ void initLibrary()
       || (getenv("NINA_AMOUNT_OF_CPUS") == NULL)) {
 
     printf
-	("libnina->initLibrary: It is necessary to define the environment variables NINA_CONFIG, NINA_MAX_FREQUENCY, NINA_AMOUNT_OF_CPUS, and NINA_TARGET_CPUS... \n");
+      ("%s: It is necessary to define the environment variables NINA_CONFIG, NINA_MAX_FREQUENCY, NINA_AMOUNT_OF_CPUS, and NINA_TARGET_CPUS... \n", __func__);
 
     exit(1);
 
