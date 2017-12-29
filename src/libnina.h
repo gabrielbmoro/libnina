@@ -43,8 +43,6 @@ void freeMemoryData();
 
 void printList();
 
-int getFileSize(char *filePath);
-
 int randomNumberBetweenMinMax(int min, int max);
 
 void initLibrary();
