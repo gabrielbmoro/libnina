@@ -6,8 +6,8 @@
 **                                                                      **
 **************************************************************************/
 
-#ifndef NINA_H
-#define NINA_H
+#ifndef LIB_NINA_H
+#define LIB_NINA_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -52,4 +52,4 @@ void callByNINALibrary(char *file, long start_line);
 
 void changeProcessorsFrequencyToMax();
 
-#endif				// NINA_H
+#endif				// LIB_NINA_H
