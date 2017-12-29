@@ -10,7 +10,7 @@
 #include "libnina.h"
 
 ParallelRegionsFile *head = NULL;
-bool logEnabled = false;
+static bool logEnabled = false;
 int amountOfCpus = 0;
 long maxFrequency = 1200000;
 int *targetCPUS = NULL;
