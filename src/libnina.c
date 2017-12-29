@@ -8,8 +8,8 @@
 **************************************************************************/
 #include <omp.h>
 #include "libnina.h"
-static bool logEnabled = false;
-#define LOG(COMMAND) if(logEnabled){ printf("%d: ", omp_get_thread_num()); COMMAND; };
+
+bool logEnabled = false;
 
 ParallelRegionsFile *head = NULL;
 int amountOfCpus = 0;

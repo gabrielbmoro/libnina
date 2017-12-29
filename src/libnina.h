@@ -22,6 +22,9 @@
 #define BUFFER_LINE 200
 #define INIT_HASH_SIZE 256
 
+#define LOG(COMMAND) if(logEnabled){ printf("%d: ", omp_get_thread_num()); COMMAND; };
+extern bool logEnabled;
+
 typedef struct ParallelRegionsFile {
   char *name;
   s_hashmap *hash;
