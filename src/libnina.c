@@ -56,7 +56,8 @@ static int *convertStringToIntegerArray(char *str)
 
 void LIBNINA_ParallelBegin(char *file, long start_line)
 {
-  long newFrequency = LIBNINA_GetFrequency(file, start_line);
+  long newFrequency;
+  newFrequency = LIBNINA_GetFrequency(file, start_line);
   LOG(printf("libnina->callByNINALibrary: file %s at %ld => %ld\n", file, start_line, newFrequency));
   if (newFrequency > 0){
     changeProcessorsFrequency(newFrequency);
