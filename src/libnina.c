@@ -6,7 +6,7 @@
 **  Gabriel B Moro, Lucas M. Schnorr, Instituto de Informática da UFRGS **
 **                                                                      **
 **************************************************************************/
-
+#include <omp.h>
 #include "libnina.h"
 static bool logEnabled = false;
 #define LOG(COMMAND) if(logEnabled){ COMMAND; };
