@@ -627,7 +627,6 @@ POMP2_Parallel_begin( POMP2_Region_handle* pomp2_handle)
 {
     pomp2_current_task = POMP2_Get_new_task_handle();
 
-
 #pragma omp critical
     if ( *pomp2_handle == NULL )
     {
