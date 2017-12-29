@@ -27,9 +27,8 @@
 #define LOG(COMMAND) if(logEnabled){ printf("%d: ", omp_get_thread_num()); COMMAND; };
 extern bool logEnabled;
 
-void initLibrary();
-void changeProcessorsFrequency(long freq);
-void callByNINALibrary(char *file, long start_line);
-void changeProcessorsFrequencyToMax();
+void LIBNINA_InitLibrary();
+void LIBNINA_ParallelBegin(char *file, long start_line);
+void LIBNINA_ParallelEnd();
 
 #endif				// LIB_NINA_H

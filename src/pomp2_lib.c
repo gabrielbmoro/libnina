@@ -253,10 +253,7 @@ POMP2_Finalize(void)
 void
 POMP2_Init(void)
 {
-  /*-> LibNINA */
-  initLibrary();
-  changeProcessorsFrequencyToMax();
-  /*My code <-*/
+  LIBNINA_InitLibrary();
  
   static int pomp2_init_called = 0;
 
@@ -637,7 +634,7 @@ POMP2_Parallel_begin( POMP2_Region_handle* pomp2_handle)
     /*-> My code */
     my_pomp2_region* region = *pomp2_handle;
 #pragma omp master
-    callByNINALibrary(region->start_file_name, region->start_line_1);
+    LIBNINA_ParallelBegin(region->start_file_name, region->start_line_1);
     /*My code <-*/
 }
 
@@ -657,7 +654,7 @@ POMP2_Parallel_end( POMP2_Region_handle* pomp2_handle )
 
     /*-> My code */
 #pragma omp master
-    changeProcessorsFrequencyToMax();
+    LIBNINA_ParallelEnd();
     /*My code <-*/
 }
 

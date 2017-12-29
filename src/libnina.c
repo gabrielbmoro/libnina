@@ -15,7 +15,7 @@ int amountOfCpus = 0;
 long maxFrequency = 1200000;
 int *targetCPUS = NULL;
 
-void changeProcessorsFrequency(long freq)
+static void changeProcessorsFrequency(long freq)
 {
   int cpufreqReturned = -1;
   int i = 0;
@@ -29,15 +29,6 @@ void changeProcessorsFrequency(long freq)
       LOG(printf("%s: of processor %d to frequency %ld (ret = %d)\n", __func__,
 		 targetCPUS[i], freq, cpufreqReturned));
     }
-  }
-}
-
-void callByNINALibrary(char *file, long start_line)
-{
-  long newFrequency = LIBNINA_GetFrequency(file, start_line);
-  LOG(printf("libnina->callByNINALibrary: file %s at %ld => %ld\n", file, start_line, newFrequency));
-  if (newFrequency > 0){
-    changeProcessorsFrequency(newFrequency);
   }
 }
 
@@ -63,12 +54,20 @@ static int *convertStringToIntegerArray(char *str)
   return numbers;
 }
 
-void changeProcessorsFrequencyToMax()
+void LIBNINA_ParallelBegin(char *file, long start_line)
 {
-  changeProcessorsFrequency(maxFrequency);
+  long newFrequency = LIBNINA_GetFrequency(file, start_line);
+  LOG(printf("libnina->callByNINALibrary: file %s at %ld => %ld\n", file, start_line, newFrequency));
+  if (newFrequency > 0){
+    changeProcessorsFrequency(newFrequency);
+  }
 }
 
-void initLibrary()
+void LIBNINA_ParallelEnd()
+{
+}
+
+void LIBNINA_InitLibrary()
 {
   if ((getenv("NINA_CONFIG") == NULL)
       || (getenv("NINA_MAX_FREQUENCY") == NULL)
