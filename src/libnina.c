@@ -28,22 +28,16 @@ void insertInList(char *name, int hashSize)
   new->next = head;
   head = new;
 
-  if (logEnabled)
-    printf("libnina->insertInList: %s (%d)\n", name, hashSize);
-
+  LOG(printf("libnina->insertInList: %s (%d)\n", name, hashSize));
 }
 
 ParallelRegionsFile *deleteFirst()
 {
-
   ParallelRegionsFile *tmpNode = head;
   head = head->next;
 
-  if (logEnabled)
-    printf("libnina->deleteFirst\n");
-
+  LOG(printf("libnina->deleteFirst\n"));
   return tmpNode;
-
 }
 
 int isListEmpty()
@@ -71,11 +65,7 @@ ParallelRegionsFile *find(char *name)
     }
 
   }
-
-  if (logEnabled){
-    printf("libnina->find: %s found %p\n", name, current);
-  }
-
+  LOG(printf("libnina->find: %s found %p\n", name, current));
   return current;
 }
 
@@ -98,9 +88,7 @@ void freeMemoryData()
   if (targetCPUS != NULL)
     free(targetCPUS);
 
-  if (logEnabled)
-    printf("libnina->freeMemoryData\n");
-
+  LOG(printf("libnina->freeMemoryData\n"));
 }
 
 void printList()
@@ -109,10 +97,10 @@ void printList()
   ParallelRegionsFile *tmp = head;
 
   while (tmp != NULL) {
-    printf("---------------------------\n");
-    printf("File name node %s\n", tmp->name);
-    printf("Count of Hash %ld\n", hashmapCount(tmp->hash));
-    printf("---------------------------\n\n");
+    LOG(printf("---------------------------\n"));
+    LOG(printf("File name node %s\n", tmp->name));
+    LOG(printf("Count of Hash %ld\n", hashmapCount(tmp->hash)));
+    LOG(printf("---------------------------\n\n"));
     tmp = tmp->next;
   }
 
@@ -225,7 +213,6 @@ void initLibrary()
     exit(1);
 
   } else {
-    printf("libnina->initLibrary: starting...\n");
 
     maxFrequency = atol(getenv("NINA_MAX_FREQUENCY"));
     amountOfCpus = atoi(getenv("NINA_AMOUNT_OF_CPUS"));
@@ -235,6 +222,7 @@ void initLibrary()
     }else{
       POMP2_Off();
     }
+    LOG(printf("libnina->initLibrary: starting...\n"));
     char *str = malloc(sizeof(char) * 40);
     str = getenv("NINA_TARGET_CPUS");
     targetCPUS = convertStringToIntegerArray(str);
@@ -288,6 +276,6 @@ void initLibrary()
     free(fileNameTmp);
 
     fclose(arq);
-    printf("libnina->initLibrary: finished.\n");
+    LOG(printf("libnina->initLibrary: finished.\n"));
   }
 }
