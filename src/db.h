@@ -1,5 +1,6 @@
 #ifndef __DB_H
 #define __DB_H
+#include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #define _GNU_SOURCE
