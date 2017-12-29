@@ -213,16 +213,18 @@ void initLibrary()
     exit(1);
 
   } else {
-
-    maxFrequency = atol(getenv("NINA_MAX_FREQUENCY"));
-    amountOfCpus = atoi(getenv("NINA_AMOUNT_OF_CPUS"));
+    // Enable or not the log.
     logEnabled = (getenv("NINA_LOG") != NULL);
     if (logEnabled){
       POMP2_On();
     }else{
       POMP2_Off();
     }
+
     LOG(printf("libnina->initLibrary: starting...\n"));
+
+    maxFrequency = atol(getenv("NINA_MAX_FREQUENCY"));
+    amountOfCpus = atoi(getenv("NINA_AMOUNT_OF_CPUS"));
     char *str = malloc(sizeof(char) * 40);
     str = getenv("NINA_TARGET_CPUS");
     targetCPUS = convertStringToIntegerArray(str);
