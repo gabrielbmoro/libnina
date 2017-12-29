@@ -8,9 +8,10 @@
 **************************************************************************/
 
 #include "libnina.h"
+static bool logEnabled = false;
+#define LOG(COMMAND) if(logEnabled){ COMMAND; };
 
 ParallelRegionsFile *head = NULL;
-static bool logEnabled = false;
 int amountOfCpus = 0;
 long maxFrequency = 1200000;
 int *targetCPUS = NULL;
