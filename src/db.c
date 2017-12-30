@@ -8,6 +8,7 @@ static int getFileSize(char *filePath)
   FILE *arq;
   int ch, lines = 0;
   arq = fopen(filePath, "r");
+  if (!arq) return -1;
 
   do {
     ch = fgetc(arq);
@@ -45,6 +46,10 @@ void LIBNINA_LoadRegionsFile (void)
 
   //Count the number of lines
   int amountOfLines = getFileSize(filePath);
+  if (amountOfLines < 0){
+    fprintf(stderr, "%s: file %s is not readable\n", __func__, filePath);
+    exit(1);
+  }
 
   //Open the regions file
   FILE *arq = fopen(filePath, "r");
