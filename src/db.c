@@ -162,7 +162,7 @@ long LIBNINA_GetFrequency (char *source_filename, int start_line)
   }
   // The region has not been found, ignore
   if (region == NULL){
-    fprintf(stderr, "Region with name [%s] not found.\n", source_filename);
+    LOG(fprintf(stderr, "Region with name [%s] not found.\n", source_filename));
     return -1;
   }else{
     LOG(printf("Region %s found.\n", region->source_filename));
