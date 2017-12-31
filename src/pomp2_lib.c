@@ -653,8 +653,9 @@ POMP2_Parallel_end( POMP2_Region_handle* pomp2_handle )
     }
 
     /*-> My code */
+    my_pomp2_region* region = *pomp2_handle;
 #pragma omp master
-    LIBNINA_ParallelEnd();
+    LIBNINA_ParallelEnd(region->start_file_name, region->start_line_1);
     /*My code <-*/
 }
 

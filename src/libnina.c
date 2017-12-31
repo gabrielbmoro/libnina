@@ -63,7 +63,7 @@ void LIBNINA_ParallelBegin(char *file, long start_line)
   }
 }
 
-void LIBNINA_ParallelEnd()
+void LIBNINA_ParallelEnd(char *file, long start_line)
 {
 }
 

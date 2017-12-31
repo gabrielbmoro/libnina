@@ -29,6 +29,6 @@ extern bool logEnabled;
 
 void LIBNINA_InitLibrary();
 void LIBNINA_ParallelBegin(char *file, long start_line);
-void LIBNINA_ParallelEnd();
+void LIBNINA_ParallelEnd(char *file, long start_line);
 
 #endif				// LIB_NINA_H
