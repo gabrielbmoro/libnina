@@ -12,7 +12,6 @@
 bool logEnabled = false;
 
 int amountOfCpus = 0;
-long maxFrequency = 1200000;
 int *targetCPUS = NULL;
 
 static void changeProcessorsFrequency(long freq)
@@ -71,12 +70,11 @@ void LIBNINA_ParallelEnd()
 void LIBNINA_InitLibrary()
 {
   if ((getenv("NINA_CONFIG") == NULL)
-      || (getenv("NINA_MAX_FREQUENCY") == NULL)
       || (getenv("NINA_TARGET_CPUS") == NULL)
       || (getenv("NINA_AMOUNT_OF_CPUS") == NULL)) {
 
     printf
-      ("%s: It is necessary to define the environment variables NINA_CONFIG, NINA_MAX_FREQUENCY, NINA_AMOUNT_OF_CPUS, and NINA_TARGET_CPUS... \n", __func__);
+      ("%s: It is necessary to define the environment variables NINA_CONFIG, NINA_AMOUNT_OF_CPUS, and NINA_TARGET_CPUS... \n", __func__);
 
     exit(1);
 
@@ -92,7 +90,6 @@ void LIBNINA_InitLibrary()
     LOG(printf("libnina->initLibrary: starting...\n"));
     LIBNINA_LoadRegionsFile();
 
-    maxFrequency = atol(getenv("NINA_MAX_FREQUENCY"));
     amountOfCpus = atoi(getenv("NINA_AMOUNT_OF_CPUS"));
     char *str = malloc(sizeof(char) * 40);
     str = getenv("NINA_TARGET_CPUS");
