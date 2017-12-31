@@ -10,7 +10,7 @@
 #include "libnina.h"
 
 bool logEnabled = false;
-
+static unsigned long previousProcessorFrequency = 0;
 int amountOfCpus = 0;
 int *targetCPUS = NULL;
 
@@ -55,6 +55,8 @@ static int *convertStringToIntegerArray(char *str)
 
 void LIBNINA_ParallelBegin(char *file, long start_line)
 {
+  previousProcessorFrequency = cpufreq_get(0);
+
   long newFrequency;
   newFrequency = LIBNINA_GetFrequency(file, start_line);
   LOG(printf("libnina->callByNINALibrary: file %s at %ld => %ld\n", file, start_line, newFrequency));
@@ -65,6 +67,8 @@ void LIBNINA_ParallelBegin(char *file, long start_line)
 
 void LIBNINA_ParallelEnd()
 {
+  changeProcessorsFrequency(previousProcessorFrequency);
+  previousProcessorFrequency = 0;
 }
 
 void LIBNINA_InitLibrary()
