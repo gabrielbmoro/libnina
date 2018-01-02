@@ -467,8 +467,6 @@ POMP2_Parallel_fork( POMP2_Region_handle* pomp2_handle,
                      POMP2_Task_handle*   pomp2_old_task,
                      const char           ctc_string[] )
 {
-    *pomp2_old_task = pomp2_current_task;
-
 #pragma omp critical
     if ( *pomp2_handle == NULL )
     {
