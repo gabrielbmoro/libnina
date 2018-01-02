@@ -22,6 +22,29 @@ bool logEnabled = false;
 int amountOfCpus = 0;
 int *targetCPUS = NULL;
 
+#ifdef LIBNINA_PAPI
+static double last = 0;
+FILE *fp;
+#endif
+
+#ifdef LIBNINA_PAPI
+#include <sys/time.h>
+inline double gettime()
+{
+   struct timespec s;
+   clock_gettime(CLOCK_REALTIME, &s);
+   double res = s.tv_sec + ((double)s.tv_nsec)/1000000000;
+   return res;
+}
+
+/* static double gettime (void) */
+/* { */
+/*   struct timeval tr; */
+/*   gettimeofday(&tr, NULL); */
+/*   return (double)tr.tv_sec+(double)tr.tv_usec/1000000; */
+/* } */
+#endif
+
 static void changeProcessorsFrequency(long freq)
 {
   int cpufreqReturned = -1;
@@ -69,14 +92,28 @@ void LIBNINA_ParallelBegin(char *file, long start_line)
   if (newFrequency > 0){
     changeProcessorsFrequency(newFrequency);
   }
+#ifdef LIBNINA_PAPI
+  last = gettime();
+  model_papi_start_counters ();
+#endif
 }
 
 void LIBNINA_ParallelEnd(char *file, long start_line)
 {
+#ifdef LIBNINA_PAPI
+  model_papi_stop_counters ();
+  double t1 = gettime();
+  fprintf(fp, "%ld %g %g %g ", start_line, t1, last, t1 - last);
+  model_papi_report(fp);
+  fprintf(fp, "\n");
+#endif
 }
 
 void LIBNINA_InitLibrary()
 {
+#ifdef LIBNINA_PAPI
+  fp = stdout;
+#endif
   if ((getenv("NINA_CONFIG") == NULL)
       || (getenv("NINA_TARGET_CPUS") == NULL)
       || (getenv("NINA_AMOUNT_OF_CPUS") == NULL)) {
@@ -108,4 +145,9 @@ void LIBNINA_InitLibrary()
     }
     LOG(printf("libnina->initLibrary: finished.\n"));
   }
+
+#ifdef LIBNINA_PAPI
+  model_init();
+  model_read_configuration ();
+#endif
 }
