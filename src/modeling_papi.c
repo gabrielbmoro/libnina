@@ -82,6 +82,7 @@ void model_papi_header_with_fp (FILE *pfp)
 {
   int i;
   //report hw counters
+  fprintf(pfp, " ");
   for (i = 0; i < papi_nevents; i++){
     char EventCodeStr[PAPI_MAX_STR_LEN];
     PAPI_event_code_to_name(Events[i], EventCodeStr);
