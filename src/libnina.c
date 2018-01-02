@@ -103,7 +103,7 @@ void LIBNINA_ParallelEnd(char *file, long start_line)
 #ifdef LIBNINA_PAPI
   model_papi_stop_counters ();
   double t1 = gettime();
-  fprintf(fp, "%ld %g %g %g ", start_line, t1, last, t1 - last);
+  fprintf(fp, "%ld %.9f %.9f %.9f ", start_line, t1, last, t1 - last);
   model_papi_report(fp);
   fprintf(fp, "\n");
 #endif
