@@ -442,7 +442,7 @@ POMP2_Parallel_begin( POMP2_Region_handle* pomp2_handle)
     }
 
     my_pomp2_region* region = *pomp2_handle;
-#pragma omp master
+#pragma omp single
     LIBNINA_ParallelBegin(region->start_file_name, region->start_line_1);
 }
 
@@ -456,7 +456,7 @@ POMP2_Parallel_end( POMP2_Region_handle* pomp2_handle )
     }
 
     my_pomp2_region* region = *pomp2_handle;
-#pragma omp master
+#pragma omp single
     LIBNINA_ParallelEnd(region->start_file_name, region->start_line_1);
 }
 
