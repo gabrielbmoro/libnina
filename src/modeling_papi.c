@@ -38,6 +38,14 @@ void model_read_configuration (void)
   
   model_papi_configuration (&cfg);
 
+  //The global trace filename
+  const char *trace_filename_prefix;
+  model_error_check(config_lookup_string(&cfg, "filename", &trace_filename_prefix));
+  char trace_filename[TF_NAME_LEN] = "\0";
+  snprintf(trace_filename, TF_NAME_LEN, "%s.csv", trace_filename_prefix);
+  if (fp) fclose(fp);
+  fp = fopen(trace_filename, "w");
+  
   //destroy configuration
   config_destroy(&cfg);
 }
