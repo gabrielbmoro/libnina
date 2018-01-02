@@ -699,199 +699,72 @@ POMP2_Parallel_join( POMP2_Region_handle* pomp2_handle,
 void
 POMP2_Section_begin( POMP2_Region_handle* pomp2_handle, const char ctc_string[] )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: begin section\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Section_end( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: end   section\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Sections_enter( POMP2_Region_handle* pomp2_handle, const char ctc_string[] )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        my_pomp2_region* region = *pomp2_handle;
-        fprintf( stderr, "%3d: enter sections (%d)\n", omp_get_thread_num(), region->num_sections );
-    }
 }
 
 void
 POMP2_Sections_exit( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: exit  sections\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Single_begin( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: begin single\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Single_end( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: end   single\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Single_enter( POMP2_Region_handle* pomp2_handle, const char ctc_string[] )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: enter single\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Single_exit( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: exit  single\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Workshare_enter( POMP2_Region_handle* pomp2_handle, const char ctc_string[] )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: enter workshare\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Workshare_exit( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: exit  workshare\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Ordered_begin( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: begin ordered\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Ordered_end( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: end ordered\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Ordered_enter( POMP2_Region_handle* pomp2_handle,
                     const char           ctc_string[] )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: enter ordered\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Ordered_exit( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: exit ordered\n", omp_get_thread_num() );
-    }
 }
 
 
@@ -902,44 +775,23 @@ POMP2_Task_create_begin( POMP2_Region_handle* pomp2_handle,
                          int                  pomp2_if,
                          const char           ctc_string[])
 {
-    *pomp2_old_task = pomp2_current_task;
-    *pomp2_new_task = POMP2_Get_new_task_handle();
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: task create begin\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Task_create_end( POMP2_Region_handle* pomp2_handle,
                        POMP2_Task_handle    pomp2_old_task )
 {
-    pomp2_current_task = pomp2_old_task;
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: task create end\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Task_begin( POMP2_Region_handle* pomp2_handle,
                   POMP2_Task_handle    pomp2_task )
 {
-    pomp2_current_task = pomp2_task;
-
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: task begin\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Task_end( POMP2_Region_handle* pomp2_handle )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: task end\n", omp_get_thread_num());
-    }
 }
 
 void
@@ -949,47 +801,23 @@ POMP2_Untied_task_create_begin( POMP2_Region_handle* pomp2_handle,
                                 int                  pomp2_if,
                                 const char           ctc_string[] )
 {
-    *pomp2_new_task = POMP2_Get_new_task_handle();
-    *pomp2_old_task = pomp2_current_task;
-
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: create  untied task\n", omp_get_thread_num() );
-        fprintf( stderr, "%3d:         suspend task %" PRIu64 "\n", omp_get_thread_num(), pomp2_current_task );
-    }
 }
 
 void
 POMP2_Untied_task_create_end( POMP2_Region_handle* pomp2_handle,
                               POMP2_Task_handle    pomp2_old_task )
 {
-    pomp2_current_task = pomp2_old_task;
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: created  untied task\n", omp_get_thread_num() );
-        fprintf( stderr, "%3d:          resume task %" PRIu64 "\n", omp_get_thread_num(), pomp2_current_task );
-    }
 }
 
 void
 POMP2_Untied_task_begin( POMP2_Region_handle* pomp2_handle,
                          POMP2_Task_handle    pomp2_parent_task )
 {
-    pomp2_current_task = POMP2_Get_new_task_handle();
-
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: start  untied task %" PRIu64 "\n", omp_get_thread_num(), pomp2_current_task );
-    }
 }
 
 void
 POMP2_Untied_task_end( POMP2_Region_handle* pomp2_handle )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: end  untied task %" PRIu64 "\n", omp_get_thread_num(), pomp2_current_task );
-    }
 }
 
 void
@@ -997,25 +825,12 @@ POMP2_Taskwait_begin( POMP2_Region_handle* pomp2_handle,
                       POMP2_Task_handle*   pomp2_old_task,
                       const char           ctc_string[] )
 {
-    *pomp2_old_task = pomp2_current_task;
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: begin  taskwait\n", omp_get_thread_num() );
-        fprintf( stderr, "%3d:  suspend task: %" PRIu64 "\n", omp_get_thread_num(), pomp2_current_task );
-    }
 }
 
 void
 POMP2_Taskwait_end( POMP2_Region_handle* pomp2_handle,
                     POMP2_Task_handle    pomp2_old_task )
 {
-    pomp2_current_task = pomp2_old_task;
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: end  taskwait\n", omp_get_thread_num() );
-        fprintf( stderr, "%3d: resume task: %" PRIu64 "\n", omp_get_thread_num(), pomp2_current_task );
-    }
-
 }
 
 /*
@@ -1027,99 +842,51 @@ POMP2_Taskwait_end( POMP2_Region_handle* pomp2_handle,
 void
 POMP2_Init_lock( omp_lock_t* s )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: init lock\n", omp_get_thread_num() );
-    }
-    omp_init_lock( s );
 }
 
 void
 POMP2_Destroy_lock( omp_lock_t* s )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: destroy lock\n", omp_get_thread_num() );
-    }
-    omp_destroy_lock( s );
 }
 
 void
 POMP2_Set_lock( omp_lock_t* s )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: set lock\n", omp_get_thread_num() );
-    }
-    omp_set_lock( s );
 }
 
 void
 POMP2_Unset_lock( omp_lock_t* s )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: unset lock\n", omp_get_thread_num() );
-    }
-    omp_unset_lock( s );
 }
 
 int
 POMP2_Test_lock( omp_lock_t* s )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: test lock\n", omp_get_thread_num() );
-    }
-    return omp_test_lock( s );
+  return 1;
 }
 
 void
 POMP2_Init_nest_lock( omp_nest_lock_t* s )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: init nestlock\n", omp_get_thread_num() );
-    }
-    omp_init_nest_lock( s );
 }
 
 void
 POMP2_Destroy_nest_lock( omp_nest_lock_t* s )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: destroy nestlock\n", omp_get_thread_num() );
-    }
-    omp_destroy_nest_lock( s );
 }
 
 void
 POMP2_Set_nest_lock( omp_nest_lock_t* s )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: set nestlock\n", omp_get_thread_num() );
-    }
-    omp_set_nest_lock( s );
 }
 
 void
 POMP2_Unset_nest_lock( omp_nest_lock_t* s )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: unset nestlock\n", omp_get_thread_num() );
-    }
-    omp_unset_nest_lock( s );
 }
 
 int
 POMP2_Test_nest_lock( omp_nest_lock_t* s )
 {
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: test nestlock\n", omp_get_thread_num() );
-    }
-    return omp_test_nest_lock( s );
+  return 1;
 }
