@@ -9,7 +9,7 @@ LDFLAGS += -shared -lcpufreq  # linking flags
 RM = rm -f  # rm command
 TARGET_LIB = libnina.so # target lib
 
-SRCS = hashmap.c db.c libnina.c pomp2_lib.c pomp2_user_region_info.c pomp2_region_info.c opari2_ctc_parser.c
+SRCS = hashmap.c db.c libnina.c pomp2_lib.c pomp2_user_region_info.c pomp2_region_info.c opari2_ctc_parser.c modeling_papi.c
 OBJS = $(SRCS:.c=.o)
 
 .PHONY: all
