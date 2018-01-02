@@ -484,13 +484,6 @@ void
 POMP2_Parallel_join( POMP2_Region_handle* pomp2_handle,
                      POMP2_Task_handle    pomp2_old_task )
 {
-    pomp2_current_task = pomp2_old_task;
-
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
     if ( pomp2_tracing )
     {
         fprintf( stderr, "%3d: join  parallel\n", omp_get_thread_num() );
