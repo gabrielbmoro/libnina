@@ -300,33 +300,11 @@ void
 POMP2_Begin( POMP2_Region_handle* pomp2_handle,
              const char           ctc_string[]  )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    my_pomp2_region* region = *pomp2_handle;
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: begin region %s\n",
-        omp_get_thread_num(), region->name );
-    }
 }
 
 void
 POMP2_End( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    my_pomp2_region* region = *pomp2_handle;
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: end   region %s\n",
-                 omp_get_thread_num(), region->name );
-    }
 }
 
 void
@@ -370,44 +348,23 @@ POMP2_USER_Assign_handle( POMP2_USER_Region_handle* pomp2_handle,
 void
 POMP2_Atomic_enter( POMP2_Region_handle* pomp2_handle, const char ctc_string[] )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: enter atomic\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Atomic_exit( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: exit  atomic\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Implicit_barrier_enter( POMP2_Region_handle* pomp2_handle,
                               POMP2_Task_handle*   pomp2_old_task )
 {
-  POMP2_Barrier_enter( pomp2_handle, pomp2_old_task, "" );
 }
 
 extern void
 POMP2_Implicit_barrier_exit( POMP2_Region_handle* pomp2_handle,
                              POMP2_Task_handle    pomp2_old_task )
 {
-  pomp2_current_task = pomp2_old_task;
-  POMP2_Barrier_exit( pomp2_handle, pomp2_old_task );
 }
 
 
@@ -416,203 +373,63 @@ POMP2_Barrier_enter( POMP2_Region_handle* pomp2_handle,
                      POMP2_Task_handle*   pomp2_old_task,
                      const char           ctc_string[] )
 {
-    *pomp2_old_task = pomp2_current_task;
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    my_pomp2_region* region = *pomp2_handle;
-    if ( pomp2_tracing )
-    {
-        if ( region->rtype[ 0 ] == 'b' )
-        {
-            fprintf( stderr, "%3d: enter barrier\n", omp_get_thread_num() );
-        }
-        else
-        {
-            fprintf( stderr, "%3d: enter implicit barrier of %s\n",
-                     omp_get_thread_num(), region->rtype );
-        }
-    }
 }
 
 void
 POMP2_Barrier_exit( POMP2_Region_handle* pomp2_handle,
                     POMP2_Task_handle    pomp2_old_task )
 {
-    pomp2_current_task = pomp2_old_task;
-
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    my_pomp2_region* region = *pomp2_handle;
-    if ( pomp2_tracing )
-    {
-        if ( region->rtype[ 0 ] == 'b' )
-        {
-            fprintf( stderr, "%3d: exit  barrier\n", omp_get_thread_num() );
-        }
-        else
-        {
-            fprintf( stderr, "%3d: exit  implicit barrier of %s\n",
-                     omp_get_thread_num(), region->rtype );
-        }
-    }
 }
 
 void
 POMP2_Flush_enter( POMP2_Region_handle* pomp2_handle,
 		   const char           ctc_string[] )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: enter flush\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Flush_exit( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: exit  flush\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_Critical_begin( POMP2_Region_handle* pomp2_handle )
 {
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    my_pomp2_region* region = *pomp2_handle;
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: begin critical %s\n",
-                 omp_get_thread_num(), region->rtype );
-    }
 }
 
 void
 POMP2_Critical_end( POMP2_Region_handle* pomp2_handle )
 {
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    my_pomp2_region* region = *pomp2_handle;
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: end   critical %s\n",
-                 omp_get_thread_num(), region->name );
-    }
 }
 
 void
 POMP2_Critical_enter( POMP2_Region_handle* pomp2_handle, const char ctc_string[] )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    my_pomp2_region* region = *pomp2_handle;
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: enter critical %s\n",
-                 omp_get_thread_num(), region->name );
-    }
 }
 
 void
 POMP2_Critical_exit( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    my_pomp2_region* region = *pomp2_handle;
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: exit  critical %s\n",
-                 omp_get_thread_num(), region->name );
-    }
 }
 
 void
 POMP2_For_enter( POMP2_Region_handle* pomp2_handle, const char ctc_string[] )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        my_pomp2_region* region = *pomp2_handle;
-
-        fprintf( stderr, "%3d: enter for\n", omp_get_thread_num() );
-    }
 }
 
 void
 POMP2_For_exit( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: exit  for\n", omp_get_thread_num() );
-
-    }
 }
 
 void
 POMP2_Master_begin( POMP2_Region_handle* pomp2_handle, const char ctc_string[] )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: begin master\n", omp_get_thread_num() );
-
-        my_pomp2_region* region = *pomp2_handle;
-    }
 }
 
 void
 POMP2_Master_end( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
-    if ( pomp2_tracing )
-    {
-        fprintf( stderr, "%3d: end   master\n", omp_get_thread_num() );
-    }
 }
 
 void
