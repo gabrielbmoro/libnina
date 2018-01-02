@@ -111,6 +111,7 @@ void model_papi_report_with_fp (FILE *pfp)
 
 void model_papi_affinity ()
 {
+  //disable core affinity (let OpenMP handle this)
   return;
   //core affinity
   cpu_set_t  mask;
