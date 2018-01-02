@@ -27,6 +27,7 @@
 #include "hashmap.h"
 #include "pomp2_user_lib.h"
 #include "db.h"
+#include "modeling_papi.h"
 
 #define BUFFER_SIZE 1024
 #define BUFFER_LINE 200
