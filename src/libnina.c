@@ -151,5 +151,6 @@ void LIBNINA_InitLibrary()
   model_read_configuration ();
   fprintf(fp, "Line Start End Duration");
   model_papi_header ();
+  fprintf(fp, "\n");
 #endif
 }
