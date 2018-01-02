@@ -435,45 +435,29 @@ POMP2_Master_end( POMP2_Region_handle* pomp2_handle )
 void
 POMP2_Parallel_begin( POMP2_Region_handle* pomp2_handle)
 {
-    pomp2_current_task = POMP2_Get_new_task_handle();
-
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
     if ( pomp2_tracing )
     {
       my_pomp2_region *r = (my_pomp2_region*)*pomp2_handle;
       fprintf( stderr, "%3d: begin parallel %s:%d-%d\n", omp_get_thread_num(), r->start_file_name, r->start_line_1, r->end_line_1 );
     }
 
-    /*-> My code */
     my_pomp2_region* region = *pomp2_handle;
 #pragma omp master
     LIBNINA_ParallelBegin(region->start_file_name, region->start_line_1);
-    /*My code <-*/
 }
 
 void
 POMP2_Parallel_end( POMP2_Region_handle* pomp2_handle )
 {
-#pragma omp critical
-    if ( *pomp2_handle == NULL )
-    {
-        POMP2_Init();
-    }
     if ( pomp2_tracing )
     {
       my_pomp2_region *r = (my_pomp2_region*)*pomp2_handle;
       fprintf( stderr, "%3d: end parallel %s:%d-%d\n", omp_get_thread_num(), r->start_file_name, r->start_line_1, r->end_line_1 );
     }
 
-    /*-> My code */
     my_pomp2_region* region = *pomp2_handle;
 #pragma omp master
     LIBNINA_ParallelEnd(region->start_file_name, region->start_line_1);
-    /*My code <-*/
 }
 
 void
