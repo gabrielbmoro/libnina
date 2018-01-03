@@ -17,6 +17,7 @@
 #include <omp.h>
 #include "libnina.h"
 
+bool dummyBehavior = false;
 bool logEnabled = false;
 
 int amountOfCpus = 0;
@@ -86,6 +87,7 @@ static int *convertStringToIntegerArray(char *str)
 
 void LIBNINA_ParallelBegin(char *file, long start_line)
 {
+  if (dummyBehavior) return;
   long newFrequency;
   newFrequency = LIBNINA_GetFrequency(file, start_line);
   LOG(fprintf(stderr, "%d libnina->ParallelBegin: file %s at %ld => %ld\n", omp_get_thread_num(), file, start_line, newFrequency));
@@ -100,6 +102,7 @@ void LIBNINA_ParallelBegin(char *file, long start_line)
 
 void LIBNINA_ParallelEnd(char *file, long start_line)
 {
+  if (dummyBehavior) return;
 #ifdef LIBNINA_PAPI
   model_papi_stop_counters ();
   double t1 = gettime();
@@ -124,6 +127,12 @@ void LIBNINA_InitLibrary()
     exit(1);
 
   } else {
+    //Dummy behavior
+    dummyBehavior = (getenv("NINA_DUMMY") != NULL);
+
+    //if dummy, do nothing in what's left of initialization
+    if (dummyBehavior) return;
+
     // Enable or not the log.
     logEnabled = (getenv("NINA_LOG") != NULL);
     if (logEnabled){
