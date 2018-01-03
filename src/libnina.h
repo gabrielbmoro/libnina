@@ -24,7 +24,6 @@
 #include <cpufreq.h>
 #include <time.h>
 #include <stdbool.h>
-#include "hashmap.h"
 #include "pomp2_user_lib.h"
 #include "db.h"
 #include "modeling_papi.h"
