@@ -88,7 +88,7 @@ void LIBNINA_ParallelBegin(char *file, long start_line)
 {
   long newFrequency;
   newFrequency = LIBNINA_GetFrequency(file, start_line);
-  LOG(printf("libnina->callByNINALibrary: file %s at %ld => %ld\n", file, start_line, newFrequency));
+  LOG(fprintf(stderr, "%d libnina->ParallelBegin: file %s at %ld => %ld\n", omp_get_thread_num(), file, start_line, newFrequency));
   if (newFrequency > 0){
     changeProcessorsFrequency(newFrequency);
   }
