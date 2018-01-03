@@ -130,9 +130,6 @@ void LIBNINA_InitLibrary()
     //Dummy behavior
     dummyBehavior = (getenv("NINA_DUMMY") != NULL);
 
-    //if dummy, do nothing in what's left of initialization
-    if (dummyBehavior) return;
-
     // Enable or not the log.
     logEnabled = (getenv("NINA_LOG") != NULL);
     if (logEnabled){
