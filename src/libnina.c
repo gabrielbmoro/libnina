@@ -18,6 +18,7 @@
 #include "libnina.h"
 
 bool dummyBehavior = false;
+bool dummyFrequencyBehavior = false;
 bool logEnabled = false;
 
 int amountOfCpus = 0;
@@ -48,6 +49,7 @@ inline double gettime()
 
 static void changeProcessorsFrequency(long freq)
 {
+  if (dummyFrequencyBehavior) return;
   int cpufreqReturned = -1;
   int i = 0;
 
@@ -129,6 +131,7 @@ void LIBNINA_InitLibrary()
   } else {
     //Dummy behavior
     dummyBehavior = (getenv("NINA_DUMMY") != NULL);
+    dummyFrequencyBehavior = (getenv("NINA_DUMMY_FREQUENCY") != NULL);
 
     // Enable or not the log.
     logEnabled = (getenv("NINA_LOG") != NULL);
