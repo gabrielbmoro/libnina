@@ -49,10 +49,13 @@ inline double gettime()
 
 static void changeProcessorsFrequency(long freq)
 {
+  static long lastFrequency = 0;
+
   if (dummyFrequencyBehavior) return;
+  if (lastFrequency == freq) return;
+
   int cpufreqReturned = -1;
   int i = 0;
-
   for (i = 0; i < amountOfCpus; i++) {
     cpufreqReturned = cpufreq_set_frequency(targetCPUS[i], freq);
     if (cpufreqReturned != 0) {
@@ -63,6 +66,7 @@ static void changeProcessorsFrequency(long freq)
 		 targetCPUS[i], freq, cpufreqReturned));
     }
   }
+  lastFrequency = freq;
 }
 
 static int *convertStringToIntegerArray(char *str)
