@@ -156,6 +156,16 @@ void LIBNINA_InitLibrary()
     if (targetCPUS == NULL){
       exit(0);
     }
+
+    //Determine limits
+    int i;
+    for (i = 0; i < amountOfCpus; i++){
+      cpufreq_get_hardware_limits(i, &min, &max);
+      unsigned long latency = cpufreq_get_transition_latency(i);
+      LOG(printf("limits cpu%d min %ld max %ld latency (nanosecs) %ld\n", i, min, max, latency));
+    }
+    //Put all in the maximum frequency
+    changeProcessorsFrequency(max);
     LOG(printf("libnina->initLibrary: finished.\n"));
   }
 
