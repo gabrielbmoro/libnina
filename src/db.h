@@ -23,6 +23,9 @@
 #define __USE_GNU
 #include <search.h>
 #include <string.h>
+#include <stdbool.h>
+
+extern bool logEnabled;
 
 #define INIT_HASH_SIZE 256
 #define STR_HASH_KEY_SIZE 200

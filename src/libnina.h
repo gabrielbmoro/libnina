@@ -32,7 +32,6 @@
 #define BUFFER_LINE 200
 #define INIT_HASH_SIZE 256
 
-extern bool logEnabled;
 #define LOG(COMMAND) if(logEnabled){ COMMAND; };
 
 void LIBNINA_InitLibrary();
