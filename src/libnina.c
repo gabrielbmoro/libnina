@@ -159,6 +159,7 @@ void LIBNINA_InitLibrary()
 
     //Determine limits
     int i;
+    unsigned long min, max;
     for (i = 0; i < amountOfCpus; i++){
       cpufreq_get_hardware_limits(i, &min, &max);
       unsigned long latency = cpufreq_get_transition_latency(i);
