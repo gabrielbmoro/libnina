@@ -1,3 +1,4 @@
+#include <omp.h>
 #include "modeling_papi.h"
 #ifdef MODELING_PAPI
 #define TF_NAME_LEN 100 // Maximum length of the trace file name
@@ -58,6 +59,11 @@ void model_init (void)
 void model_papi_init ()
 {
   PAPI_library_init(PAPI_VER_CURRENT);
+#pragma omp parallel
+  if( PAPI_thread_init( (unsigned long (*)(void))(omp_get_thread_num) ) != PAPI_OK ) {
+    printf("PAPI couldn't init its threads\n");
+    exit(0);
+  }
   int num_hwcntrs = PAPI_num_counters();
   if (num_hwcntrs < 0){
     printf("The installation does not support PAPI.\n");
