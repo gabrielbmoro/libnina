@@ -128,14 +128,6 @@ void model_papi_affinity ()
 {
   //disable core affinity (let OpenMP handle this)
   return;
-  //core affinity
-  cpu_set_t  mask;
-  CPU_ZERO(&mask);
-  CPU_SET(0, &mask);
-  if (sched_setaffinity(0, sizeof(mask), &mask) < 0){
-    fprintf(stderr, "Failed to set core affinity.\n");
-    exit(1);
-  }
 }
 
 void model_papi_configuration (config_t *cfg)
