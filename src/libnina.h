@@ -24,6 +24,9 @@
 #include <cpufreq.h>
 #include <time.h>
 #include <stdbool.h>
+#ifdef LIBNINA_THREAD
+#include <pthread.h>
+#endif
 #include "pomp2_user_lib.h"
 #include "db.h"
 #include "modeling_papi.h"
@@ -37,5 +40,18 @@
 void LIBNINA_InitLibrary();
 void LIBNINA_ParallelBegin(char *file, long start_line);
 void LIBNINA_ParallelEnd(char *file, long start_line);
+
+#ifdef LIBNINA_THREAD
+void LIBNINA_QueueFrequency (unsigned long frequency);
+void *LIBNINA_Thread(void *arg);
+#define BUFFER_MAX_SIZE 100
+typedef struct {
+    unsigned long buf[BUFFER_MAX_SIZE]; // the buffer
+    size_t len; // number of items in the buffer
+    pthread_mutex_t mutex; // needed to add/remove data from the buffer
+    pthread_cond_t can_produce; // signaled when items are removed
+    pthread_cond_t can_consume; // signaled when items are added
+} buffer_t;
+#endif
 
 #endif				// LIB_NINA_H

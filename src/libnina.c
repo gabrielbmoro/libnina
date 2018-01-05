@@ -24,6 +24,11 @@ bool logEnabled = false;
 int amountOfCpus = 0;
 int *targetCPUS = NULL;
 
+#ifdef LIBNINA_THREAD
+pthread_t thread;
+buffer_t buffer;
+#endif
+
 #ifdef LIBNINA_PAPI
 static double last = 0;
 FILE *fp;
@@ -91,6 +96,48 @@ static int *convertStringToIntegerArray(char *str)
   return numbers;
 }
 
+#ifdef LIBNINA_THREAD
+void LIBNINA_QueueFrequency (unsigned long frequency)
+{
+  pthread_mutex_lock(&buffer.mutex);
+
+  if(buffer.len == BUFFER_MAX_SIZE) { // full
+    pthread_cond_wait(&buffer.can_produce, &buffer.mutex);
+  }
+
+  buffer.buf[buffer.len] = frequency;
+  buffer.len++;
+
+  pthread_cond_signal(&buffer.can_consume);
+  pthread_mutex_unlock(&buffer.mutex);
+}
+
+void *LIBNINA_Thread (void *arg)
+{
+  buffer_t *buffer = (buffer_t*)arg;
+
+  while(1){
+    pthread_mutex_lock(&buffer->mutex);
+
+    if(buffer->len == 0) { //empty
+      pthread_cond_wait(&buffer->can_consume,
+			&buffer->mutex);
+    }
+
+    // get the last frequency to be set
+    unsigned long freq;
+    freq = buffer->buf[buffer->len-1];
+    printf("%s --> %ld %ld\n", __func__, freq, buffer->len);
+    changeProcessorsFrequency(freq);
+    buffer->len = 0;
+
+    pthread_cond_signal(&buffer->can_produce);
+    pthread_mutex_unlock(&buffer->mutex);
+  }
+  return NULL;
+}
+#endif //LIBNINA_THREAD
+
 void LIBNINA_ParallelBegin(char *file, long start_line)
 {
   if (dummyBehavior) return;
@@ -98,7 +145,11 @@ void LIBNINA_ParallelBegin(char *file, long start_line)
   newFrequency = LIBNINA_GetFrequency(file, start_line);
   LOG(fprintf(stderr, "%d libnina->ParallelBegin: file %s at %ld => %ld\n", omp_get_thread_num(), file, start_line, newFrequency));
   if (newFrequency > 0){
+#ifdef LIBNINA_THREAD
+    LIBNINA_QueueFrequency(newFrequency);
+#else
     changeProcessorsFrequency(newFrequency);
+#endif
   }
 #ifdef LIBNINA_PAPI
   last = gettime();
@@ -120,6 +171,14 @@ void LIBNINA_ParallelEnd(char *file, long start_line)
 
 void LIBNINA_InitLibrary()
 {
+#ifdef LIBNINA_THREAD
+  buffer.len = 0;
+  pthread_mutex_init(&buffer.mutex, NULL);
+  pthread_cond_init(&buffer.can_produce, NULL);
+  pthread_cond_init(&buffer.can_consume, NULL);
+  pthread_create(&thread, NULL, &LIBNINA_Thread, (void*)&buffer);
+#endif
+
 #ifdef LIBNINA_PAPI
   fp = stdout;
 #endif
@@ -166,7 +225,11 @@ void LIBNINA_InitLibrary()
       LOG(printf("limits cpu%d min %ld max %ld latency (nanosecs) %ld\n", i, min, max, latency));
     }
     //Put all in the maximum frequency
+#ifdef LIBNINA_THREAD
+    LIBNINA_QueueFrequency(max);
+#else
     changeProcessorsFrequency(max);
+#endif
     LOG(printf("libnina->initLibrary: finished.\n"));
   }
 
