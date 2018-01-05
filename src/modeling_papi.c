@@ -58,6 +58,14 @@ void model_init (void)
 void model_papi_init ()
 {
   PAPI_library_init(PAPI_VER_CURRENT);
+  int num_hwcntrs = PAPI_num_counters();
+  if (num_hwcntrs < 0){
+    printf("The installation does not support PAPI.\n");
+    exit(1);
+  }else if(num_hwcntrs == 0){
+    printf("The installation supports PAPI, but has no counters.\n");
+    exit(1);
+  }
   Events = malloc(PAPI_MAX_HWCTRS*sizeof(int));
   Values = malloc(PAPI_MAX_HWCTRS*sizeof(long_long));
   papi_nevents = 0;
