@@ -173,7 +173,6 @@ void LIBNINA_ParallelJoin(char *file, long start_line)
   fprintf(fp, "%ld %.9f %.9f %.9f ", start_line, t1, last, t1 - last);
   model_papi_report(fp);
   fprintf(fp, "\n");
-  exit(1);
 #endif
 }
 
