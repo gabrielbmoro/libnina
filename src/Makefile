@@ -6,6 +6,7 @@ LDFLAGS =
 CC = gcc # C compiler
 
 CFLAGS = -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O2 -g -fopenmp # C flags
+#CFLAGS += -DLIBNINA_THREAD
 #CFLAGS += -DMODELING_PAPI -DLIBNINA_PAPI
 LDFLAGS += -shared -lcpufreq -lpapi -lconfig  # linking flags
 RM = rm -f  # rm command
