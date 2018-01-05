@@ -151,21 +151,29 @@ void LIBNINA_ParallelBegin(char *file, long start_line)
     changeProcessorsFrequency(newFrequency);
 #endif
   }
+}
+
+void LIBNINA_ParallelEnd(char *file, long start_line)
+{
+}
+
+void LIBNINA_ParallelFork(char *file, long start_line)
+{
 #ifdef LIBNINA_PAPI
   last = gettime();
   model_papi_start_counters ();
 #endif
 }
 
-void LIBNINA_ParallelEnd(char *file, long start_line)
+void LIBNINA_ParallelJoin(char *file, long start_line)
 {
-  if (dummyBehavior) return;
 #ifdef LIBNINA_PAPI
   model_papi_stop_counters ();
   double t1 = gettime();
   fprintf(fp, "%ld %.9f %.9f %.9f ", start_line, t1, last, t1 - last);
   model_papi_report(fp);
   fprintf(fp, "\n");
+  exit(1);
 #endif
 }
 

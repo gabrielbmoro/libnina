@@ -476,6 +476,8 @@ POMP2_Parallel_fork( POMP2_Region_handle* pomp2_handle,
     {
         fprintf( stderr, "%3d: fork  parallel\n", omp_get_thread_num() );
     }
+    my_pomp2_region* region = *pomp2_handle;
+    LIBNINA_ParallelFork(region->start_file_name, region->start_line_1);
 }
 
 void
@@ -486,6 +488,8 @@ POMP2_Parallel_join( POMP2_Region_handle* pomp2_handle,
     {
         fprintf( stderr, "%3d: join  parallel\n", omp_get_thread_num() );
     }
+    my_pomp2_region* region = *pomp2_handle;
+    LIBNINA_ParallelJoin(region->start_file_name, region->start_line_1);
 }
 
 void

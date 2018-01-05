@@ -40,6 +40,8 @@
 void LIBNINA_InitLibrary();
 void LIBNINA_ParallelBegin(char *file, long start_line);
 void LIBNINA_ParallelEnd(char *file, long start_line);
+void LIBNINA_ParallelFork(char *file, long start_line);
+void LIBNINA_ParallelJoin(char *file, long start_line);
 
 #ifdef LIBNINA_THREAD
 void LIBNINA_QueueFrequency (unsigned long frequency);

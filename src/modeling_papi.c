@@ -6,7 +6,7 @@
 extern FILE *fp; //defined somewhere
 
 int *Events;
-long_long *Values;
+long_long **Values; //one list for each thread
 int papi_nevents;
 
 void model_error_check (int returnCode){
@@ -72,19 +72,32 @@ void model_papi_init ()
     printf("The installation supports PAPI, but has no counters.\n");
     exit(1);
   }
+  int nthreads;
+#pragma omp parallel
+#pragma omp master
+  {
+    nthreads = omp_get_num_threads();
+  }
   Events = malloc(PAPI_MAX_HWCTRS*sizeof(int));
-  Values = malloc(PAPI_MAX_HWCTRS*sizeof(long_long));
+  int i;
+  Values = (long_long **)malloc(nthreads * sizeof(long_long*));
+  for (i = 0; i < nthreads; i++){
+    Values[i] = (long_long*)malloc(PAPI_MAX_HWCTRS*sizeof(long_long));
+    bzero(Values[i], PAPI_MAX_HWCTRS);
+  }
   papi_nevents = 0;
 }
 
 void model_papi_start_counters ()
 {
+#pragma omp parallel
   PAPI_start_counters(Events, papi_nevents);
 }
 
 void model_papi_stop_counters ()
 {
-  PAPI_stop_counters(Values, papi_nevents);
+#pragma omp parallel
+  PAPI_stop_counters(Values[omp_get_thread_num()], papi_nevents);
 }
 
 void model_papi_header ()
@@ -114,14 +127,31 @@ void model_papi_report (FILE *zz)
 
 void model_papi_report_with_fp (FILE *pfp)
 {
-  int i;
+  int nthreads;
+
+#pragma omp parallel
+  {
+    nthreads = omp_get_num_threads();
+  }
+
+  int i, j;
+  long_long *v = (long_long*)malloc(PAPI_MAX_HWCTRS*sizeof(long_long));
+  bzero(v, PAPI_MAX_HWCTRS);
+  for(i = 0; i < nthreads; i++){
+    for (j = 0; j < papi_nevents; j++){
+      v[j] += Values[i][j];
+    }
+  }
+
   //report hw counters
   for (i = 0; i < papi_nevents; i++){
-    fprintf(pfp, "%lld", Values[i]);
+    fprintf(pfp, "%lld", v[i]);
     if (i+1 != papi_nevents){
       fprintf(pfp, " ");
     }
   }
+
+  free(v);
 }
 
 void model_papi_affinity ()
