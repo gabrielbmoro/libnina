@@ -32,11 +32,8 @@ pthread_t thread;
 buffer_t buffer;
 #endif
 
-#ifdef LIBNINA_PAPI
+// For Papi support
 static double last = 0;
-#endif
-
-#ifdef LIBNINA_PAPI
 #include <sys/time.h>
 inline double gettime()
 {
@@ -45,7 +42,6 @@ inline double gettime()
    double res = s.tv_sec + ((double)s.tv_nsec)/1000000000;
    return res;
 }
-#endif
 
 static void changeProcessorsFrequency(long freq)
 {
@@ -135,9 +131,7 @@ void *LIBNINA_Thread (void *arg)
 
 void LIBNINA_ParallelBegin(char *file, long start_line)
 {
-#ifdef LIBNINA_PAPI
-  return;
-#endif
+  if (papiCollection) return;
   if (dummyBehavior) return;
   long newFrequency;
   newFrequency = LIBNINA_GetFrequency(file, start_line);
@@ -157,21 +151,21 @@ void LIBNINA_ParallelEnd(char *file, long start_line)
 
 void LIBNINA_ParallelFork(char *file, long start_line)
 {
-#ifdef LIBNINA_PAPI
-  last = gettime();
-  model_papi_start_counters ();
-#endif
+  if (papiCollection){
+    last = gettime();
+    model_papi_start_counters ();
+  }
 }
 
 void LIBNINA_ParallelJoin(char *file, long start_line)
 {
-#ifdef LIBNINA_PAPI
-  model_papi_stop_counters ();
-  double t1 = gettime();
-  fprintf(fp, "%ld %.9f %.9f %.9f ", start_line, t1, last, t1 - last);
-  model_papi_report(fp);
-  fprintf(fp, "\n");
-#endif
+  if (papiCollection){
+    model_papi_stop_counters ();
+    double t1 = gettime();
+    fprintf(fp, "%ld %.9f %.9f %.9f ", start_line, t1, last, t1 - last);
+    model_papi_report(fp);
+    fprintf(fp, "\n");
+  }
 }
 
 void LIBNINA_InitLibrary()
@@ -238,11 +232,11 @@ void LIBNINA_InitLibrary()
     LOG(printf("libnina->initLibrary: finished.\n"));
   }
 
-#ifdef LIBNINA_PAPI
-  model_init();
-  model_read_configuration ();
-  fprintf(fp, "Line End Start Duration");
-  model_papi_header ();
-  fprintf(fp, "\n");
-#endif
+  if (papiCollection){
+    model_init();
+    model_read_configuration ();
+    fprintf(fp, "Line End Start Duration");
+    model_papi_header ();
+    fprintf(fp, "\n");
+  }
 }

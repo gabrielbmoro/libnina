@@ -1,9 +1,7 @@
 #ifndef __MODELING_PAPI_H_
 #define __MODELING_PAPI_H_
 #include <stdio.h>
-#ifdef LIBNINA_PAPI
 #define MODELING_PAPI
-#endif
 #ifdef MODELING_PAPI
 #include <libconfig.h>
 #include <papi.h>
