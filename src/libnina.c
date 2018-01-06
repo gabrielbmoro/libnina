@@ -24,6 +24,8 @@ bool logEnabled = false;
 int amountOfCpus = 0;
 int *targetCPUS = NULL;
 
+FILE *fp;
+
 #ifdef LIBNINA_THREAD
 pthread_t thread;
 buffer_t buffer;
@@ -31,7 +33,6 @@ buffer_t buffer;
 
 #ifdef LIBNINA_PAPI
 static double last = 0;
-FILE *fp;
 #endif
 
 #ifdef LIBNINA_PAPI
