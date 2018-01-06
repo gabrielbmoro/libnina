@@ -191,9 +191,6 @@ void LIBNINA_InitLibrary()
   pthread_create(&thread, NULL, &LIBNINA_Thread, (void*)&buffer);
 #endif
 
-#ifdef LIBNINA_PAPI
-  fp = stdout;
-#endif
   if ((getenv("NINA_CONFIG") == NULL)
       || (getenv("NINA_TARGET_CPUS") == NULL)
       || (getenv("NINA_AMOUNT_OF_CPUS") == NULL)) {
