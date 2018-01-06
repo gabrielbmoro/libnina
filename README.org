@@ -38,6 +38,8 @@ grub-mkconfig -o /boot/grub/grub.cfg
 #+END_EXAMPLE
 
 - [[https://unix.stackexchange.com/questions/121410/setting-cpu-governor-to-on-demand-or-conservative][Check here for further details about disabling =intel_pstate=]].
+
+- libpapi-dev, libconfig-dev, and libcpufreq-dev.
   
 * Experiment: =teste_1=
 ** Introduction
