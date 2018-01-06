@@ -203,7 +203,7 @@ void LIBNINA_InitLibrary()
     exit(1);
 
   } else {
-    //Dummy behavior
+    // Check for dummy behavior
     dummyBehavior = (getenv("NINA_DUMMY") != NULL);
     dummyFrequencyBehavior = (getenv("NINA_DUMMY_FREQUENCY") != NULL);
 
