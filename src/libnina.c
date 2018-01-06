@@ -45,13 +45,6 @@ inline double gettime()
    double res = s.tv_sec + ((double)s.tv_nsec)/1000000000;
    return res;
 }
-
-/* static double gettime (void) */
-/* { */
-/*   struct timeval tr; */
-/*   gettimeofday(&tr, NULL); */
-/*   return (double)tr.tv_sec+(double)tr.tv_usec/1000000; */
-/* } */
 #endif
 
 static void changeProcessorsFrequency(long freq)
