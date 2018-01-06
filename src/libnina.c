@@ -140,6 +140,9 @@ void *LIBNINA_Thread (void *arg)
 
 void LIBNINA_ParallelBegin(char *file, long start_line)
 {
+#ifdef LIBNINA_PAPI
+  return;
+#endif
   if (dummyBehavior) return;
   long newFrequency;
   newFrequency = LIBNINA_GetFrequency(file, start_line);
