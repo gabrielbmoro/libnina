@@ -17,6 +17,7 @@
 #include <omp.h>
 #include "libnina.h"
 
+bool papiCollection = false;
 bool dummyBehavior = false;
 bool dummyFrequencyBehavior = false;
 bool logEnabled = false;
@@ -214,6 +215,9 @@ void LIBNINA_InitLibrary()
     }else{
       POMP2_Off();
     }
+
+    // Verify if libpapi is active
+    papiCollection = (getenv("NINA_PAPI") != NULL);
 
     LOG(printf("libnina->initLibrary: starting...\n"));
     LIBNINA_LoadRegionsFile();
