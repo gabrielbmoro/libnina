@@ -243,7 +243,7 @@ void LIBNINA_InitLibrary()
 #ifdef LIBNINA_PAPI
   model_init();
   model_read_configuration ();
-  fprintf(fp, "Line Start End Duration");
+  fprintf(fp, "Line End Start Duration");
   model_papi_header ();
   fprintf(fp, "\n");
 #endif
