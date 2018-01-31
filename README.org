@@ -51,7 +51,7 @@ sudo cpupower frequency-info --governors
 - In this case, it is possible to use this library, because the
   userspace governor exists.
 
-- It's necessary the libpapi, libconfig, and libcpufeq
+- It's necessary the libpapi, libconfig, and libcpufreq
   installation. The follow command line may be used:
 
 #+begin_src sh :results output :exports both
