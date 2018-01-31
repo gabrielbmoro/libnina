@@ -184,31 +184,37 @@ void LIBNINA_InitLibrary()
   pthread_create(&thread, NULL, &LIBNINA_Thread, (void *) &buffer);
 #endif
 
-  if ((getenv("NINA_CONFIG") == NULL)
-      || (getenv("NINA_TARGET_CPUS") == NULL)
-      || (getenv("NINA_AMOUNT_OF_CPUS") == NULL)) {
-
-    printf
-	("%s: It is necessary to define the environment variables NINA_CONFIG, NINA_AMOUNT_OF_CPUS, and NINA_TARGET_CPUS... \n",
-	 __func__);
-
-    exit(1);
-
+  // Enable or not the log.
+  logEnabled = (getenv("NINA_LOG") != NULL);
+  if (logEnabled) {
+    POMP2_On();
   } else {
+    POMP2_Off();
+  }
+
+  // Verify if libpapi is active
+  papiCollection = (getenv("NINA_PAPI") != NULL);
+
+  if (papiCollection == true){
+    // Phase 1: HW collection
+
+  }else{
+    // Phase 2: Freq control
+
     // Check for dummy behavior
     dummyBehavior = (getenv("NINA_DUMMY") != NULL);
     dummyFrequencyBehavior = (getenv("NINA_DUMMY_FREQUENCY") != NULL);
 
-    // Enable or not the log.
-    logEnabled = (getenv("NINA_LOG") != NULL);
-    if (logEnabled) {
-      POMP2_On();
-    } else {
-      POMP2_Off();
-    }
+    if ((getenv("NINA_CONFIG") == NULL) ||
+	(getenv("NINA_TARGET_CPUS") == NULL) ||
+	(getenv("NINA_AMOUNT_OF_CPUS") == NULL)) {
 
-    // Verify if libpapi is active
-    papiCollection = (getenv("NINA_PAPI") != NULL);
+      printf ("%s: It is necessary to define the environment "
+	      "variables NINA_CONFIG, NINA_AMOUNT_OF_CPUS, "
+	      "and NINA_TARGET_CPUS... \n",
+	 __func__);
+      exit(1);
+    }
 
     LOG(printf("libnina->initLibrary: starting...\n"));
     LIBNINA_LoadRegionsFile();
