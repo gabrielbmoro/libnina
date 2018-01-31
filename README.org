@@ -241,3 +241,21 @@ Use the appropriate tool to mesure execution time and energy consumption.
 These environment variables are also available:
 - =NINA_LOG=, to obtain debug messages in stdout
 - =NINA_DUMMY=, if set, do everything but does not change freq
+* Misc
+
+To monitor CPU power/energy using the Intel's RAPL interface, use:
+https://github.com/kentcz/rapl-tools
+
+#+begin_src shell :results output :exports both
+sudo apt-get install msr-tools
+sudo modprobe msr
+sudo chmod o+rw /dev/cpu/0/msr
+git clone https://github.com/kentcz/rapl-tools.git
+cd rapl-tools
+make
+sudo apt-get install libcap2-bin
+sudo setcap cap_sys_rawio+ep ./AppPowerMeter
+sudo setcap cap_sys_rawio+ep ./PowerMonitor
+#+end_src
+
+Use the =AppPowerMeter= to mesure the 
