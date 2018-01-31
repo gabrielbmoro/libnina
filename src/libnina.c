@@ -120,7 +120,9 @@ void *LIBNINA_Thread(void *arg)
     // get the last frequency to be set
     unsigned long freq;
     freq = buffer->buf[buffer->len - 1];
-    printf("%s --> %ld %ld\n", __func__, freq, buffer->len);
+    if (logEnabled){
+      printf("%s --> %ld %ld\n", __func__, freq, buffer->len);
+    }
     changeProcessorsFrequency(freq);
     buffer->len = 0;
 
