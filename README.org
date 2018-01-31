@@ -145,7 +145,7 @@ sudo -E LD_LIBRARY_PATH=/home/schnorr/svn/gabriel/libnina/src/ ./lulesh2.0
 
 The resulting file has this contents:
 
-#+begin_src shell :results output
+#+begin_src shell :results output :exports both
 head ~/svn/gabriel/bitbucket.2/LULESH-2.0.3/libnina.csv
 #+end_src
 
