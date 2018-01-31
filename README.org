@@ -10,13 +10,11 @@
 #+coding: utf-8
 
 Libnina is a library used to reduce the energy consumption of OpenMP
-parallel applications. The libnina methodology uses two steps, the
-first one is necessary to generate a configuration file that will
-describe the target application's behavior. In the second step, the
-target application will be executed using pomp2 library with
-libnina. The library uses the configuration file to reduce the energy
-consumption using cpufreq calls to change the CPU frequency according
-to the provided configuration file.
+parallel applications. It has two operation modes: the HW counter
+collection mode, used to characterize the application behavior; and
+the CPU frequency control mode, where the reduction of energy
+consumption becomes possible if memory-bound regions are set to
+execute with a lower CPU frequency.
 
 * Requirements
 
