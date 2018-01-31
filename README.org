@@ -258,4 +258,4 @@ sudo setcap cap_sys_rawio+ep ./AppPowerMeter
 sudo setcap cap_sys_rawio+ep ./PowerMonitor
 #+end_src
 
-Use the =AppPowerMeter= to mesure the 
+Use the =AppPowerMeter= to mesure the time/energy of an application.
