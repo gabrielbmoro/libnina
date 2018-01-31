@@ -203,7 +203,6 @@ void LIBNINA_InitLibrary()
 
     // Check for dummy behavior
     dummyBehavior = (getenv("NINA_DUMMY") != NULL);
-    dummyFrequencyBehavior = (getenv("NINA_DUMMY_FREQUENCY") != NULL);
 
     if ((getenv("NINA_CONFIG") == NULL) ||
 	(getenv("NINA_TARGET_CPUS") == NULL) ||
