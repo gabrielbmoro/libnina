@@ -176,14 +176,6 @@ void LIBNINA_ParallelJoin(char *file, long start_line)
 
 void LIBNINA_InitLibrary()
 {
-#ifdef LIBNINA_THREAD
-  buffer.len = 0;
-  pthread_mutex_init(&buffer.mutex, NULL);
-  pthread_cond_init(&buffer.can_produce, NULL);
-  pthread_cond_init(&buffer.can_consume, NULL);
-  pthread_create(&thread, NULL, &LIBNINA_Thread, (void *) &buffer);
-#endif
-
   // Enable or not the log.
   logEnabled = (getenv("NINA_LOG") != NULL);
   if (logEnabled) {
@@ -197,6 +189,12 @@ void LIBNINA_InitLibrary()
 
   if (papiCollection == true){
     // Phase 1: HW collection
+
+    model_init();
+    model_read_configuration();
+    fprintf(fp, "Line End Start Duration");
+    model_papi_header();
+    fprintf(fp, "\n");
 
   }else{
     // Phase 2: Freq control
@@ -215,6 +213,14 @@ void LIBNINA_InitLibrary()
 	 __func__);
       exit(1);
     }
+
+#ifdef LIBNINA_THREAD
+    buffer.len = 0;
+    pthread_mutex_init(&buffer.mutex, NULL);
+    pthread_cond_init(&buffer.can_produce, NULL);
+    pthread_cond_init(&buffer.can_consume, NULL);
+    pthread_create(&thread, NULL, &LIBNINA_Thread, (void *) &buffer);
+#endif
 
     LOG(printf("libnina->initLibrary: starting...\n"));
     LIBNINA_LoadRegionsFile();
@@ -244,13 +250,5 @@ void LIBNINA_InitLibrary()
     changeProcessorsFrequency(max);
 #endif
     LOG(printf("libnina->initLibrary: finished.\n"));
-  }
-
-  if (papiCollection) {
-    model_init();
-    model_read_configuration();
-    fprintf(fp, "Line End Start Duration");
-    model_papi_header();
-    fprintf(fp, "\n");
   }
 }
