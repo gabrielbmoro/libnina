@@ -1,4 +1,5 @@
 /*
+/*
  * This file is part of the Score-P software (http://www.score-p.org)
  *
  * Copyright (c) 2009-2011,
@@ -397,3 +398,4 @@ freePOMP2RegionInfoMembers( POMP2_Region_info* regionInfo )
     OPARI2_CTC_freeAndReset( &regionInfo->mCriticalName );
     OPARI2_CTC_freeAndReset( &regionInfo->mUserGroupName );
 }
+ 

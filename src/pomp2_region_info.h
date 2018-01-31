@@ -59,7 +59,7 @@
  *
  */
 typedef enum {			/* POMP2_Region_type */
-      POMP2_No_type = 0,
+  POMP2_No_type = 0,
   POMP2_Atomic,
   POMP2_Barrier,
   POMP2_Critical,

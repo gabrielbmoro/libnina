@@ -44,15 +44,15 @@ void LIBNINA_ParallelFork(char *file, long start_line);
 void LIBNINA_ParallelJoin(char *file, long start_line);
 
 #ifdef LIBNINA_THREAD
-void LIBNINA_QueueFrequency (unsigned long frequency);
+void LIBNINA_QueueFrequency(unsigned long frequency);
 void *LIBNINA_Thread(void *arg);
 #define BUFFER_MAX_SIZE 100
 typedef struct {
-    unsigned long buf[BUFFER_MAX_SIZE]; // the buffer
-    size_t len; // number of items in the buffer
-    pthread_mutex_t mutex; // needed to add/remove data from the buffer
-    pthread_cond_t can_produce; // signaled when items are removed
-    pthread_cond_t can_consume; // signaled when items are added
+  unsigned long buf[BUFFER_MAX_SIZE];	// the buffer
+  size_t len;			// number of items in the buffer
+  pthread_mutex_t mutex;	// needed to add/remove data from the buffer
+  pthread_cond_t can_produce;	// signaled when items are removed
+  pthread_cond_t can_consume;	// signaled when items are added
 } buffer_t;
 #endif
 

@@ -49,7 +49,7 @@ typedef struct {
 /** @brief errors the user is responsible for, i.e. just errors in
  *   the passed string */
 typedef enum {			/* CTC_ERROR_Type */
-      CTC_ERROR_Ended_unexpectedly,
+  CTC_ERROR_Ended_unexpectedly,
   CTC_ERROR_No_region_type,
   CTC_ERROR_No_separator_after_length_field,
   CTC_ERROR_Num_sections_invalid,

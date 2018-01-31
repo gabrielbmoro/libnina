@@ -37,29 +37,33 @@ static double last = 0;
 #include <sys/time.h>
 inline double gettime()
 {
-   struct timespec s;
-   clock_gettime(CLOCK_REALTIME, &s);
-   double res = s.tv_sec + ((double)s.tv_nsec)/1000000000;
-   return res;
+  struct timespec s;
+  clock_gettime(CLOCK_REALTIME, &s);
+  double res = s.tv_sec + ((double) s.tv_nsec) / 1000000000;
+  return res;
 }
 
 static void changeProcessorsFrequency(long freq)
 {
   static long lastFrequency = 0;
 
-  if (dummyFrequencyBehavior) return;
-  if (lastFrequency == freq) return;
+  if (dummyFrequencyBehavior)
+    return;
+  if (lastFrequency == freq)
+    return;
 
   int cpufreqReturned = -1;
   int i = 0;
   for (i = 0; i < amountOfCpus; i++) {
     cpufreqReturned = cpufreq_set_frequency(targetCPUS[i], freq);
     if (cpufreqReturned != 0) {
-      LOG(printf("libnina->changeProcessorsFrequency: Problems to change processor's frequency...\n"));
+      LOG(printf
+	  ("libnina->changeProcessorsFrequency: Problems to change processor's frequency...\n"));
       exit(0);
-    }else{
-      LOG(printf("%s: of processor %d to frequency %ld (ret = %d)\n", __func__,
-		 targetCPUS[i], freq, cpufreqReturned));
+    } else {
+      LOG(printf
+	  ("%s: of processor %d to frequency %ld (ret = %d)\n",
+	   __func__, targetCPUS[i], freq, cpufreqReturned));
     }
   }
   lastFrequency = freq;
@@ -80,7 +84,7 @@ static int *convertStringToIntegerArray(char *str)
   res = realloc(res, sizeof(char *) * (n_spaces + 1));
   res[n_spaces] = 0;
   int *numbers = malloc(sizeof(int) * n_spaces);
-  for (i = 0; i < n_spaces; ++i){
+  for (i = 0; i < n_spaces; ++i) {
     numbers[i] = atoi(res[i]);
   }
   free(res);
@@ -88,11 +92,11 @@ static int *convertStringToIntegerArray(char *str)
 }
 
 #ifdef LIBNINA_THREAD
-void LIBNINA_QueueFrequency (unsigned long frequency)
+void LIBNINA_QueueFrequency(unsigned long frequency)
 {
   pthread_mutex_lock(&buffer.mutex);
 
-  if(buffer.len == BUFFER_MAX_SIZE) { // full
+  if (buffer.len == BUFFER_MAX_SIZE) {	// full
     pthread_cond_wait(&buffer.can_produce, &buffer.mutex);
   }
 
@@ -103,21 +107,19 @@ void LIBNINA_QueueFrequency (unsigned long frequency)
   pthread_mutex_unlock(&buffer.mutex);
 }
 
-void *LIBNINA_Thread (void *arg)
+void *LIBNINA_Thread(void *arg)
 {
-  buffer_t *buffer = (buffer_t*)arg;
+  buffer_t *buffer = (buffer_t *) arg;
 
-  while(1){
+  while (1) {
     pthread_mutex_lock(&buffer->mutex);
 
-    if(buffer->len == 0) { //empty
-      pthread_cond_wait(&buffer->can_consume,
-			&buffer->mutex);
+    if (buffer->len == 0) {	//empty
+      pthread_cond_wait(&buffer->can_consume, &buffer->mutex);
     }
-
     // get the last frequency to be set
     unsigned long freq;
-    freq = buffer->buf[buffer->len-1];
+    freq = buffer->buf[buffer->len - 1];
     printf("%s --> %ld %ld\n", __func__, freq, buffer->len);
     changeProcessorsFrequency(freq);
     buffer->len = 0;
@@ -127,16 +129,20 @@ void *LIBNINA_Thread (void *arg)
   }
   return NULL;
 }
-#endif //LIBNINA_THREAD
+#endif				//LIBNINA_THREAD
 
 void LIBNINA_ParallelBegin(char *file, long start_line)
 {
-  if (papiCollection) return;
-  if (dummyBehavior) return;
+  if (papiCollection)
+    return;
+  if (dummyBehavior)
+    return;
   long newFrequency;
   newFrequency = LIBNINA_GetFrequency(file, start_line);
-  LOG(fprintf(stderr, "%d libnina->ParallelBegin: file %s at %ld => %ld\n", omp_get_thread_num(), file, start_line, newFrequency));
-  if (newFrequency > 0){
+  LOG(fprintf
+      (stderr, "%d libnina->ParallelBegin: file %s at %ld => %ld\n",
+       omp_get_thread_num(), file, start_line, newFrequency));
+  if (newFrequency > 0) {
 #ifdef LIBNINA_THREAD
     LIBNINA_QueueFrequency(newFrequency);
 #else
@@ -151,16 +157,16 @@ void LIBNINA_ParallelEnd(char *file, long start_line)
 
 void LIBNINA_ParallelFork(char *file, long start_line)
 {
-  if (papiCollection){
+  if (papiCollection) {
     last = gettime();
-    model_papi_start_counters ();
+    model_papi_start_counters();
   }
 }
 
 void LIBNINA_ParallelJoin(char *file, long start_line)
 {
-  if (papiCollection){
-    model_papi_stop_counters ();
+  if (papiCollection) {
+    model_papi_stop_counters();
     double t1 = gettime();
     fprintf(fp, "%ld %.9f %.9f %.9f ", start_line, t1, last, t1 - last);
     model_papi_report(fp);
@@ -175,7 +181,7 @@ void LIBNINA_InitLibrary()
   pthread_mutex_init(&buffer.mutex, NULL);
   pthread_cond_init(&buffer.can_produce, NULL);
   pthread_cond_init(&buffer.can_consume, NULL);
-  pthread_create(&thread, NULL, &LIBNINA_Thread, (void*)&buffer);
+  pthread_create(&thread, NULL, &LIBNINA_Thread, (void *) &buffer);
 #endif
 
   if ((getenv("NINA_CONFIG") == NULL)
@@ -183,7 +189,8 @@ void LIBNINA_InitLibrary()
       || (getenv("NINA_AMOUNT_OF_CPUS") == NULL)) {
 
     printf
-      ("%s: It is necessary to define the environment variables NINA_CONFIG, NINA_AMOUNT_OF_CPUS, and NINA_TARGET_CPUS... \n", __func__);
+	("%s: It is necessary to define the environment variables NINA_CONFIG, NINA_AMOUNT_OF_CPUS, and NINA_TARGET_CPUS... \n",
+	 __func__);
 
     exit(1);
 
@@ -194,9 +201,9 @@ void LIBNINA_InitLibrary()
 
     // Enable or not the log.
     logEnabled = (getenv("NINA_LOG") != NULL);
-    if (logEnabled){
+    if (logEnabled) {
       POMP2_On();
-    }else{
+    } else {
       POMP2_Off();
     }
 
@@ -211,17 +218,18 @@ void LIBNINA_InitLibrary()
     str = getenv("NINA_TARGET_CPUS");
     targetCPUS = convertStringToIntegerArray(str);
 
-    if (targetCPUS == NULL){
+    if (targetCPUS == NULL) {
       exit(0);
     }
-
     //Determine limits
     int i;
     unsigned long min, max;
-    for (i = 0; i < amountOfCpus; i++){
+    for (i = 0; i < amountOfCpus; i++) {
       cpufreq_get_hardware_limits(i, &min, &max);
       unsigned long latency = cpufreq_get_transition_latency(i);
-      LOG(printf("limits cpu%d min %ld max %ld latency (nanosecs) %ld\n", i, min, max, latency));
+      LOG(printf
+	  ("limits cpu%d min %ld max %ld latency (nanosecs) %ld\n",
+	   i, min, max, latency));
     }
     //Put all in the maximum frequency
 #ifdef LIBNINA_THREAD
@@ -232,11 +240,11 @@ void LIBNINA_InitLibrary()
     LOG(printf("libnina->initLibrary: finished.\n"));
   }
 
-  if (papiCollection){
+  if (papiCollection) {
     model_init();
-    model_read_configuration ();
+    model_read_configuration();
     fprintf(fp, "Line End Start Duration");
-    model_papi_header ();
+    model_papi_header();
     fprintf(fp, "\n");
   }
 }
