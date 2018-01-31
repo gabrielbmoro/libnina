@@ -59,3 +59,32 @@ sudo apt install libpapi-dev -y
 sudo apt install libconfig-dev -y
 sudo apt install libcpufreq-dev -y
 #+end_src
+
+* Compilation
+
+#+begin_src shell :results output
+cd src
+make clean
+make
+#+end_src
+
+#+RESULTS:
+#+begin_example
+rm -f   libnina.so  db.o libnina.o pomp2_lib.o pomp2_user_region_info.o pomp2_region_info.o opari2_ctc_parser.o modeling_papi.o db.d libnina.d pomp2_lib.d pomp2_user_region_info.d pomp2_region_info.d opari2_ctc_parser.d modeling_papi.d
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD -MM modeling_papi.c >modeling_papi.d
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD -MM opari2_ctc_parser.c >opari2_ctc_parser.d
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD -MM pomp2_region_info.c >pomp2_region_info.d
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD -MM pomp2_user_region_info.c >pomp2_user_region_info.d
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD -MM pomp2_lib.c >pomp2_lib.d
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD -MM libnina.c >libnina.d
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD -MM db.c >db.d
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD   -c -o db.o db.c
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD   -c -o libnina.o libnina.c
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD   -c -o pomp2_lib.o pomp2_lib.c
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD   -c -o pomp2_user_region_info.o pomp2_user_region_info.c
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD   -c -o pomp2_region_info.o pomp2_region_info.c
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD   -c -o opari2_ctc_parser.o opari2_ctc_parser.c
+gcc  -Wno-unused-parameter -Wno-unused-variable -fPIC -Wall -Wextra -O3 -g -fopenmp  -DLIBNINA_THREAD   -c -o modeling_papi.o modeling_papi.c
+gcc  -o libnina.so db.o libnina.o pomp2_lib.o pomp2_user_region_info.o pomp2_region_info.o opari2_ctc_parser.o modeling_papi.o  -shared -lcpufreq -lpapi -lconfig  
+#+end_example
+
