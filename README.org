@@ -62,7 +62,7 @@ sudo apt install libcpufreq-dev -y
 
 * Compilation
 
-#+begin_src shell :results output
+#+begin_src shell :results output  :exports both
 cd src
 make clean
 make
@@ -97,7 +97,7 @@ is done, your application dynamic libraries should look like this
 (example for the lulesh application); note the =libnina=, =libpapi=,
 =libcpufreq=, and =libpthread=, linkage:
 
-#+begin_src shell :results output
+#+begin_src shell :results output :exports both
 export LD_LIBRARY_PATH=$HOME/svn/gabriel/libnina/src/
 cd $HOME/svn/gabriel/bitbucket.2/LULESH-2.0.3
 ldd ./lulesh2.0
@@ -137,7 +137,7 @@ papi: {
 
 The configuration file should be placed where the application binary is. Then:
 
-#+begin_src shell :results output
+#+begin_src shell :results output :exports both
 export OMP_PROC_BIND=true
 export NINA_PAPI=true
 sudo -E LD_LIBRARY_PATH=/home/schnorr/svn/gabriel/libnina/src/ ./lulesh2.0
@@ -183,7 +183,7 @@ Unset this environment variable
 
 The contents of the configuration file look like this:
 
-#+begin_src shell :results output
+#+begin_src shell :results output :exports both
 cat $HOME/svn/gabriel/bitbucket.2/LULESH-2.0.3/LULESH_NINA.conf
 #+end_src
 
@@ -227,7 +227,7 @@ cat $HOME/svn/gabriel/bitbucket.2/LULESH-2.0.3/LULESH_NINA.conf
 
 Then run:
 
-#+begin_src shell :results output
+#+begin_src shell :results output :exports both
 unset NINA_PAPI
 export NINA_CONFIG=LULESH_NINA.conf
 export NINA_AMOUNT_OF_CPUS=4
